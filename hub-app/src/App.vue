@@ -328,7 +328,7 @@ label.form-check-label {
 	position: absolute;
 	visibility: hidden;
 	top: 0;
-	margin-bottom: 2em;
+	margin-bottom: 4em;
 }
 #chart-wrap .services.service-active {
 	visibility: visible;
