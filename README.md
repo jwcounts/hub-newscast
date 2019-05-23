@@ -28,8 +28,8 @@ This application was built to help visualize and aggregate newscast analytics fo
 10. **_If you already have your reporting setup in place, skip to here_**  
    Click the `Run Analysis` button.
 11. Click the `Excel` icon in the toolbar up top. In the popover, select "Export to a New Excel File" and click `Finish`. You can name the file whatever you want, it doesn't matter.  
-   <img src="screenshots/screen-08.png" alt="Click the Excel button" width="500">
-   <img src="screenshots/screen-09.png" alt="Select 'export to a new excel file'" width="500">
+   <img src="screenshots/screen-08.png" alt="Click the Excel button" width="500">  
+   <img src="screenshots/screen-09.png" alt="Select 'export to a new excel file'" width="500">  
 12. In your browser of choice, go to [the News Hub upload page](https://analytics.hpm.io/hub/upload/), and enter the password you've been given.
 13. Drag-and-drop your file into the dropzone, or click in the dropzone to bring up a file picker. You can upload multiple files at a time, as long as the files contain one month's data for one station.  
    <img src="screenshots/screen-11.png" alt="The upload screen" width="500">
