@@ -43,9 +43,9 @@ This is a PHP application that manages dependencies with Composer.
 3. Rename `.env.sample` to `.env`. Update the password you want the app to use, and also the folder that you want the data stored in.
 
 ## Installation on a Server
-Currently, these two apps are storing like this on the server:
+Currently, these two apps are stored like this on the server:
 ```
-> /hub/
+/hub/
    ↘️ /css/
    ↘️ /data/    < This is where the parsed PPM data lives
    ↘️ /js/
