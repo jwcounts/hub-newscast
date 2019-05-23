@@ -1,0 +1,30 @@
+.DS_Store
+node_modules
+dist/
+vendor/
+package-lock.json
+composer.lock
+hub-uploader/data/*
+!hub-uploader/data/.gitkeep
+hup-uploader/uploads/
+*.xls
+*-test.php
+
+# local env files
+.env.local
+.env.*.local
+.env
+
+# Log files
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Editor directories and files
+.idea
+.vscode
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?

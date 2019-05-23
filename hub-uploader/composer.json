@@ -1,0 +1,16 @@
+{
+    "name": "jaredcounts/import",
+    "type": "project",
+    "require": {
+        "phpoffice/phpspreadsheet": "dev-master",
+		"vlucas/phpdotenv": "^2.0.1",
+		"oscarotero/env": "^1.1.0"
+    },
+    "authors": [
+        {
+            "name": "Jared Counts",
+            "email": "jcounts@houstonpublicmedia.org"
+        }
+    ],
+    "minimum-stability": "dev"
+}
