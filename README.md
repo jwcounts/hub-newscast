@@ -23,11 +23,11 @@ This application was built to help visualize and aggregate newscast analytics fo
 7. Select your Outlet. Please only select one outlet at a time, since it will skew the Analysis Totals otherwise.
 8. Select your Estimates by clicking the `Estimates` button. The reporting is currently set up to accept "AQH Persons," "Share%," "AVG WK Cume," and "PUMM." Once you have moved them into the "Selected" pane, please order them as pictured. The parsing script is set up to pull the metrics in that order. That may change in the future, but for the time being, please set it up this way.  
    <img src="screenshots/screen-06.png" alt="Setting up our estimates" width="500">
-9. Select the rest of the reporting options: Target = "P 6+", Location = "Both In/Out of Home", Listening = "Threshold Not Set"
+9. Select the rest of the reporting options: Target = "P 6+", Location = "Both In/Out of Home", Listening = "Threshold Not Set"  
    <img src="screenshots/screen-07.png" alt="The remaining settings" width="500">
 10. **_If you already have your reporting setup in place, skip to here_**  
    Click the `Run Analysis` button.
-11. Click the `Excel` icon in the toolbar up top. In the popover, select "Export to a New Excel File" and click `Finish`. You can name the file whatever you want, it doesn't matter.
+11. Click the `Excel` icon in the toolbar up top. In the popover, select "Export to a New Excel File" and click `Finish`. You can name the file whatever you want, it doesn't matter.  
    <img src="screenshots/screen-08.png" alt="Click the Excel button" width="500">
    <img src="screenshots/screen-09.png" alt="Select 'export to a new excel file'" width="500">
 12. In your browser of choice, go to [the News Hub upload page](https://analytics.hpm.io/hub/upload/), and enter the password you've been given.
