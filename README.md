@@ -9,30 +9,30 @@ This application was built to help visualize and aggregate newscast analytics fo
 
 1. Open PPM Analysis Tool. As it is only available for Windows machines, macOS users will either have to find a separate machine or set up a virtual machine. If you go the virtual machine route, [Microsoft offers some basic VMs that you can download and use for free](https://developer.microsoft.com/en-us/microsoft-edge/tools/vms/) for the various virtualization platforms. [VirtualBox is available for free also.](https://www.virtualbox.org/wiki/Downloads)
 2. Open the Ranker section and click "Radio." Here is a screenshot of our report setup. If you can match this without any other help, you can skip to step 10.  
-   ![Selecting Radio Ranker report in PPM Analysis Tool](screenshots/screen-01.png)
-   ![Screenshot of PPM Analysis Tool Ranker report setup](screenshots/screen-02.png)
+   <img src="screenshots/screen-01.png" alt="Selecting Radio Ranker report in PPM Analysis Tool" width="500">
+   <img alt="Screenshot of PPM Analysis Tool Ranker report setup" src="screenshots/screen-02.png" width="500">
 3. First, define your market. Depending on the data sets you have access to, you should only have access to one market. If it doesn't appear in the dropdown, click the `Market` button and select it.
 4. Select your survey. You can run several surveys at once, but you can only view or export results one survey at a time. If you already have surveys in the dropdown, select the survey you want to run your report on. Otherwise, click the `Survey` button. In the popup, select the "Monthly" tab, highlight the month you wish to report on, and either double-click or click the right arrow to select.  
-   ![How to select monthly surveys for reporting](screenshots/screen-03.png)
+   <img src="screenshots/screen-03.png" alt="How to select monthly surveys for reporting" width="500">
 5. Select your Geography. I usually pull the METRO Geography (as opposed to DMA), but we should decide as a group to be consistent.
 6. Select your TimePeriod.  We will need to create a custom period, so click on the `TimePeriod` button. In the popup, click the "Custom" tab, select "Monday" for your Start Day, "Friday" for your End Day, Start Time of 7AM, End Time of 6PM, and select "Avg. All" under Day Selection. Click the `Select` button to enter it into the "Selected" pane below. You can also add it to your favorites, if you want.
 
    **_Make sure that the secondary dropdown on TimePeriod is set to "Quarter Hour." Very important._**
 
-   ![Creating a custom time period](screenshots/screen-04.png)
+   <img src="screenshots/screen-04.png" alt="Creating a custom time period" width="500">
 7. Select your Outlet. Please only select one outlet at a time, since it will skew the Analysis Totals otherwise.
 8. Select your Estimates by clicking the `Estimates` button. The reporting is currently set up to accept "AQH Persons," "Share%," "AVG WK Cume," and "PUMM." Once you have moved them into the "Selected" pane, please order them as pictured. The parsing script is set up to pull the metrics in that order. That may change in the future, but for the time being, please set it up this way.
-   ![Setting up our estimates](screenshots/screen-06.png)
+   <img src="screenshots/screen-06.png" alt="Setting up our estimates" width="500">
 9. Select the rest of the reporting options: Target = "P 6+", Location = "Both In/Out of Home", Listening = "Threshold Not Set"
-   ![The remaining settings](screenshots/screen-07.png)
+   <img src="screenshots/screen-07.png" alt="The remaining settings" width="500">
 10. **_If you already have your reporting setup in place, skip to here_**  
    Click the `Run Analysis` button.
 11. Click the `Excel` icon in the toolbar up top. In the popover, select "Export to a New Excel File" and click `Finish`. You can name the file whatever you want, it doesn't matter.
-   ![Click the Excel button](screenshots/screen-08.png)
-   ![Select 'export to a new excel file'](screenshots/screen-09.png)
+   <img src="screenshots/screen-08.png" alt="Click the Excel button" width="500">
+   <img src="screenshots/screen-09.png" alt="Select 'export to a new excel file'" width="500">
 12. In your browser of choice, go to [the News Hub upload page](https://analytics.hpm.io/hub/upload/), and enter the password you've been given.
 13. Drag-and-drop your file into the dropzone, or click in the dropzone to bring up a file picker. You can upload multiple files at a time, as long as the files contain one month's data for one station.
-   ![The upload screen](screenshots/screen-11.png)
+   <img src="screenshots/screen-11.png" alt="The upload screen" width="500">
 
 ## Installation
 
