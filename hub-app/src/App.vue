@@ -29,11 +29,15 @@
 					<template v-if="item.text == 'overall' ">
 						<Overall :chart-data="chartData"></Overall>
 					</template>
+					<template v-else-if="item.text == 'ros' ">
+						<Ros :chart-data="chartData"></Ros>
+					</template>
 					<template v-else>
-						<bar-chart :chart-data="pullOutlet(item.title,chartData,'aqh-persons')" :options="renderOptions('aqh-persons')"></bar-chart>
-						<bar-chart :chart-data="pullOutlet(item.title,chartData,'share')" :options="renderOptions('share')"></bar-chart>
-						<bar-chart :chart-data="pullOutlet(item.title,chartData,'avg-wk-cume')" :options="renderOptions('avg-wk-cume')"></bar-chart>
-						<bar-chart :chart-data="pullOutlet(item.title,chartData,'pumm')" :options="renderOptions('pumm')"></bar-chart>
+						<bar-chart :chart-data="pullOutlet(item.text,chartData,'aqh-persons')" :options="renderOptions('aqh-persons')"></bar-chart>
+						<bar-chart :chart-data="pullOutlet(item.text,chartData,'aqh-rtg')" :options="renderOptions('aqh-rtg')"></bar-chart>
+						<bar-chart :chart-data="pullOutlet(item.text,chartData,'share')" :options="renderOptions('share')"></bar-chart>
+						<bar-chart :chart-data="pullOutlet(item.text,chartData,'avg-wk-cume')" :options="renderOptions('avg-wk-cume')"></bar-chart>
+						<bar-chart :chart-data="pullOutlet(item.text,chartData,'pumm')" :options="renderOptions('pumm')"></bar-chart>
 					</template>
 				</div>
 			</div>
@@ -46,6 +50,7 @@
 
 <script>
 import Overall from '@/components/Overall'
+import Ros from '@/components/Ros'
 import BarChart from '@/components/BarChart'
 export default {
 	name: 'App',
@@ -54,6 +59,7 @@ export default {
 	],
 	components: {
 		Overall,
+		Ros,
 		BarChart
 	},
 	data() {
@@ -139,7 +145,7 @@ export default {
 				}]
 			};
 			for (var d in data ) {
-				if ( typeof data[d] === 'object' && d !== 'Totals' ) {
+				if ( typeof data[d] === 'object' && d !== 'Averages' && d !== 'ROS' ) {
 					output.labels.push(d);
 					output.datasets[0].data.push( data[d]['before'][metric] );
 					output.datasets[1].data.push( data[d]['during'][metric] );
@@ -152,6 +158,8 @@ export default {
 			var title;
 			if ( metric == 'aqh-persons' ) {
 				title = 'Average Quarter Hour Persons'
+			} else if ( metric == 'aqh-rtg' ) {
+				title = 'AQH Rating %';
 			} else if ( metric == 'share' ) {
 				title = 'Share %';
 			} else if ( metric == 'avg-wk-cume' ) {
@@ -280,13 +288,11 @@ label.form-check-label {
 	background-color: rgba(219,68,55,0.2);
 	border-top: 2px solid rgba(219,68,55,1);
 }
-#tab div.kera-fm,
-#tab div.koda-fm {
+#tab div.kera-fm {
 	background-color: rgba(59,89,152,0.2);
 	border-top: 2px solid rgba(59,89,152,1);
 }
-#tab div.kut-fm,
-#tab div.khmx-fm {
+#tab div.kut-fm {
 	background-color: rgba(138,58,185,0.2);
 	border-top: 2px solid rgba(138,58,185,1);
 }
@@ -298,6 +304,10 @@ label.form-check-label {
 	background-color: rgba(128,128,128,0.2);
 	border-top: 2px solid rgba(128,128,128,1);
 }
+#tab div.ros {
+	background-color: rgba(15,185,24,0.2);
+	border-top: 2px solid rgba(15,185,24,1);
+}
 #tab div.tab-active {
 	font-weight: bolder;
 	color: white;
@@ -305,12 +315,10 @@ label.form-check-label {
 #tab div.tab-active.kuhf-fm {
 	background-color: rgba(219,68,55,0.75);
 }
-#tab div.tab-active.kera-fm,
-#tab div.tab-active.koda-fm {
+#tab div.tab-active.kera-fm {
 	background-color: rgba(59,89,152,0.75);
 }
-#tab div.tab-active.kut-fm,
-#tab div.tab-active.khmx-fm {
+#tab div.tab-active.kut-fm {
 	background-color: rgba(138,58,185,0.75);
 }
 #tab div.tab-active.kstx-fm {
@@ -318,6 +326,9 @@ label.form-check-label {
 }
 #tab div.tab-active.overall {
 	background-color: rgba(128,128,128,0.75);
+}
+#tab div.tab-active.ros {
+	background-color: rgba(15,185,24,0.75);
 }
 #chart-wrap {
 	position: relative;

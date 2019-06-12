@@ -1,6 +1,5 @@
 <?PHP
 	session_start();
-	$password = 'altitude ferment dustpan';
 	require_once 'vendor/autoload.php';
 	$ds = DIRECTORY_SEPARATOR;
 

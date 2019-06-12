@@ -27,11 +27,12 @@ window.getJSON = function(url, callback) {
 };
 window.parseStations = function(data) {
 	var currentStation = [
-		{ title: 'Overall', text: 'overall' }
+		{ title: 'Broadcast Overview', text: 'ros' },
+		{ title: 'Newscasts Summary', text: 'overall' }
 	]
 	for (var d in data ) {
 		if (typeof data[d] === 'object') {
-			currentStation.push( { title: d, text: d.toLowerCase() } );
+			currentStation.push( { title: d.toUpperCase() + ' Newscasts', text: d.toLowerCase() } );
 		}
 	}
 	return currentStation;

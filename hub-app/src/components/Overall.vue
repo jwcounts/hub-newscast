@@ -29,7 +29,9 @@ export default {
 				outlets.push(d);
 			}
 			for (var o in chartData[outlets[0]]) {
-				times.push(o);
+				if ( o != 'ROS' ) {
+					times.push(o);
+				}
 			}
 			return times;
 		},
@@ -40,34 +42,63 @@ export default {
 			var metrics = [];
 			var times = [];
 			var outlets = [];
+			var averages = [];
 			var m, s, f;
 			var output = '';
 			for (var c in chartData) {
 				outlets.push(c);
 			}
 			for (var o in chartData[outlets[0]]) {
-				times.push(o);
+				if ( o !== 'ROS' ) {
+					times.push(o);
+				}
 			}
 			for (var t in chartData[outlets[0]][times[0]]['during']) {
 				metrics.push({text: t, title: t.replace('-', ' ').toUpperCase()});
+			}
+			for (m=0; m<metrics.length; m++) {
+				averages[metrics[m].text] = [];
+				for (f=0; f<times.length; f++) {
+					if ( times[f] !== 'Averages' ) {
+						averages[metrics[m].text][times[f]] = 0;
+					}
+				}
 			}
 			for (s=0; s<outlets.length; s++) {
 				for (m=0; m<metrics.length; m++) {
 					output += '<tr>';
 					if ( m == 0 ) {
-						output += '<th rowspan="4" scope="row" class="text-center align-middle">'+outlets[s]+'</th>';
+						output += '<th rowspan="5" scope="row" class="text-center align-middle">'+outlets[s].toUpperCase()+'</th>';
 					}
 					output += '<td><strong>'+metrics[m].title+'</strong></td>';
+
 					for (f=0; f<times.length; f++) {
-						if ( times[f] == 'Totals' ) {
+						if ( times[f] == 'Averages' ) {
 							output += '<td class="text-center">'+numberWithCommas( chartData[outlets[s]][times[f]][metrics[m].text] )+'</td>';
 						} else {
 							output += '<td class="text-center">'+numberWithCommas( chartData[outlets[s]][times[f]]['during'][metrics[m].text] )+'</td>';
+							averages[metrics[m].text][times[f]] = averages[metrics[m].text][times[f]] + Number( chartData[outlets[s]][times[f]]['during'][metrics[m].text] );
 						}
 					}
 					output += '</tr>';
 				}
 			}
+			for (m=0; m<metrics.length; m++) {
+					output += '<tr>';
+					if ( m == 0 ) {
+						output += '<th rowspan="5" scope="row" class="text-center align-middle">All Stations<br />(Average)</th>';
+					}
+					output += '<td><strong>'+metrics[m].title+'</strong></td>';
+
+					for (f=0; f<times.length; f++) {
+						if ( times[f] == 'Averages' ) {
+							output += '<td class="text-center"></td>';
+						} else {
+							output += '<td class="text-center">'+numberWithCommas( ( averages[metrics[m].text][times[f]]/outlets.length ).toFixed(1) )+'</td>';
+						}
+					}
+					output += '</tr>';
+				}
 			return output;
 		}
 	}
