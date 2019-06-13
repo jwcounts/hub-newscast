@@ -44,6 +44,7 @@
 		</div>
 		<footer>
 			<p class="float-right"><a href="/hub/upload/" class="btn btn-success">Data Upload</a></p>
+			<p class="float-right" style="margin-right: 1em;"><a :href="monthExcel" class="btn btn-primary" target="_blank">Download Current Month</a></p>
 		</footer>
 	</div>
 </template>
@@ -55,7 +56,7 @@ import BarChart from '@/components/BarChart'
 export default {
 	name: 'App',
 	props: [
-		'options', 'month-selected', 'chart-data', 'station-list'
+		'options', 'month-selected', 'chart-data', 'station-list', 'month-list', 'month-excel'
 	],
 	components: {
 		Overall,
@@ -73,6 +74,11 @@ export default {
 			// when the dropdown is changed, change the monthSelected data in $root
 			if (oldMonth !== newMonth) {
 				this.$root.monthSelected = this.month;
+				for (var e = 0; e < this.monthList.length; e++ ) {
+					if ( this.monthList[e].value == this.month ) {
+						this.$root.monthExcel = '/hub/data/excel/' + this.monthList[e].download;
+					}
+				}
 				var root = this.$root;
 				var groot = this;
 				getJSON( "/hub/data/"+this.month+".json",

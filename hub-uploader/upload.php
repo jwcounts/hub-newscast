@@ -50,9 +50,11 @@
 	endforeach;
 
 	$reports = json_decode( file_get_contents( $reportsFile ), true );
-	foreach ( $reports as $rep ) :
-		$reportWeeks[ $rep['value'] ] = $rep['text'];
-	endforeach;
+	if ( !empty( $reports ) ) :
+		foreach ( $reports as $rep ) :
+			$reportWeeks[ $rep['value'] ] = [ 'text' => $rep['text'], 'download' => $rep['download'] ] ;
+		endforeach;
+	endif;
 
 	if ( !empty( $_SESSION['pin'] ) && $_SESSION['pin'] === $password ) :
 		if ( !empty( $_FILES ) ) :
@@ -60,7 +62,6 @@
 				$filename = $_FILES['acd']['name'];
 				$tempFile = $_FILES['acd']['tmp_name'];
 			endif;
-
 			$spreadsheet = \PhpOffice\PhpSpreadsheet\IOFactory::load( $tempFile );
 			$data = $spreadsheet->getActiveSheet()->toArray( null, true, true, true );
 			$headers = $avg_aqh = $avg_aqh_rtg = $avg_share = $avg_wk_cume = $avg_pumm = [];
@@ -80,8 +81,14 @@
 						$temp = [];
 					endif;
 
+					$excel_file = $match[1].'_'.$match[2].'-Newscast_Summary.xlsx';
+					$excel_file_path = $data_path . 'excel' . $ds . $excel_file;
+
 					if ( empty( $reportWeeks[ $report_date ] ) ) :
-						$reportWeeks[ $report_date ] = ucwords( strtolower( $week ) ) . ' (' . $start_date . '-' . $end_date . ')';
+						$reportWeeks[ $report_date ] = [
+							'text' => ucwords( strtolower( $week ) ) . ' (' . $start_date . '-' . $end_date . ')',
+							'download' => $excel_file
+						];
 					endif;
 				elseif ( $d['A'] == 'Rank' ) :
 					foreach ( $d as $k => $v ) :
@@ -157,12 +164,14 @@
 				endif;
 			endforeach;
 			if ( !$ros ) :
-				foreach ( $temp[ $station ] as $tp ) :
-					$avg_aqh[] = $tp['during']['aqh-persons'];
-					$avg_aqh_rtg[] = $tp['during']['aqh-rtg'];
-					$avg_share[] = $tp['during']['share'];
-					$avg_wk_cume[] = $tp['during']['avg-wk-cume'];
-					$avg_pumm[] = $tp['during']['pumm'];
+				foreach ( $temp[ $station ] as $tk => $tp ) :
+					if ( $tk !== 'Averages' && $tk !== 'ROS' ) :
+						$avg_aqh[] = $tp['during']['aqh-persons'];
+						$avg_aqh_rtg[] = $tp['during']['aqh-rtg'];
+						$avg_share[] = $tp['during']['share'];
+						$avg_wk_cume[] = $tp['during']['avg-wk-cume'];
+						$avg_pumm[] = $tp['during']['pumm'];
+					endif;
 				endforeach;
 				$temp[ $station ][ 'Averages' ] = [
 					'aqh-persons' => round( array_sum( $avg_aqh ) / count( $avg_aqh ), 0 ),
@@ -177,11 +186,14 @@
 			krsort( $reportWeeks );
 			foreach ( $reportWeeks as $rk => $rv ) :
 				$reports[] = [
-					'text' => $rv,
-					'value' => $rk
+					'text' => $rv['text'],
+					'value' => $rk,
+					'download' => $rv['download']
 				];
 			endforeach;
 			file_put_contents( $reportsFile, json_encode( $reports ) );
+
+			require __DIR__ . $ds . 'sheets.php';
 
 			$result = [
 				'message' => '<p>Data has been updated. <a href="/hub/">Check it out here</a>.</p>'

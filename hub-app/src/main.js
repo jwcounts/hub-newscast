@@ -9,7 +9,9 @@ Vue.config.productionTip = false
 let chartData = []
 let options = []
 let monthSelected = ''
+let monthExcel = ''
 let stations = []
+let monthList = []
 
 window.getJSON = function(url, callback) {
 	var xhr = new XMLHttpRequest();
@@ -43,6 +45,8 @@ getJSON( "/hub/data/reports.json",
 			console.log(err);
 		} else {
 			monthSelected = data[0].value;
+			monthExcel = '/hub/data/excel/' + data[0].download;
+			monthList = data;
 			options = data;
 			getJSON( "/hub/data/"+monthSelected+".json",
 				function(err,data) {
@@ -54,12 +58,14 @@ getJSON( "/hub/data/reports.json",
 						new Vue({
 							el: '#app',
 							components: { App },
-							template: '<App :month-selected="monthSelected" :options="options" :chart-data="chartData" :station-list="stations"></App>',
+							template: '<App :month-selected="monthSelected" :month-excel="monthExcel" :month-list="monthList" :options="options" :chart-data="chartData" :station-list="stations"></App>',
 							data: {
 								monthSelected: monthSelected,
 								options: options,
 								chartData: chartData,
-								stations: stations
+								stations: stations,
+								monthList: monthList,
+								monthExcel: monthExcel
 							}
 						})
 					}

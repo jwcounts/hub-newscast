@@ -6,6 +6,7 @@ package-lock.json
 composer.lock
 hub-uploader/data/*
 !hub-uploader/data/.gitkeep
+!hub-uploader/data/excel/.gitkeep
 hup-uploader/uploads/
 *.xls
 *-test.php
