@@ -107,7 +107,7 @@
 
 	// Adding all station averages to the Newscast summary sheet
 	for ( $i = 0; $i < count( $metrics ); $i ++ ) :
-		$nc_temp = [];
+		$nc_temp = $nc_meta = [];
 		if ( $i == 0 ) :
 			$nc_temp[] = 'All Stations (Averages)';
 		else :
@@ -116,8 +116,9 @@
 		$nc_temp[] = $metrics[$i]['name'];
 		foreach ( $times as $tt ) :
 			$nc_temp[] = round( array_sum( $nc_avg[$tt][ $metrics[$i]['slug'] ] ) / count( $nc_avg[$tt][ $metrics[$i]['slug'] ] ), 1 );
+			$nc_meta[] = round( array_sum( $nc_avg[$tt][ $metrics[$i]['slug'] ] ) / count( $nc_avg[$tt][ $metrics[$i]['slug'] ] ), 1 );
 		endforeach;
-		$nc_temp[] = '';
+		$nc_temp[] = round( array_sum( $nc_meta ) / count( $nc_meta ), 1 );
 		$sheets['Newscasts Summary'][] = $nc_temp;
 	endfor;
 	

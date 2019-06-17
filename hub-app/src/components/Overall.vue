@@ -43,6 +43,7 @@ export default {
 			var times = [];
 			var outlets = [];
 			var averages = [];
+			var avgMeta = [];
 			var m, s, f;
 			var output = '';
 			for (var c in chartData) {
@@ -58,6 +59,7 @@ export default {
 			}
 			for (m=0; m<metrics.length; m++) {
 				averages[metrics[m].text] = [];
+				avgMeta[metrics[m].text] = 0;
 				for (f=0; f<times.length; f++) {
 					if ( times[f] !== 'Averages' ) {
 						averages[metrics[m].text][times[f]] = 0;
@@ -75,6 +77,7 @@ export default {
 					for (f=0; f<times.length; f++) {
 						if ( times[f] == 'Averages' ) {
 							output += '<td class="text-center">'+numberWithCommas( chartData[outlets[s]][times[f]][metrics[m].text] )+'</td>';
+							avgMeta[metrics[m].text] = avgMeta[metrics[m].text] + Number( chartData[outlets[s]][times[f]][metrics[m].text] );
 						} else {
 							output += '<td class="text-center">'+numberWithCommas( chartData[outlets[s]][times[f]]['during'][metrics[m].text] )+'</td>';
 							averages[metrics[m].text][times[f]] = averages[metrics[m].text][times[f]] + Number( chartData[outlets[s]][times[f]]['during'][metrics[m].text] );
@@ -84,21 +87,21 @@ export default {
 				}
 			}
 			for (m=0; m<metrics.length; m++) {
-					output += '<tr>';
-					if ( m == 0 ) {
-						output += '<th rowspan="5" scope="row" class="text-center align-middle">All Stations<br />(Average)</th>';
-					}
-					output += '<td><strong>'+metrics[m].title+'</strong></td>';
-
-					for (f=0; f<times.length; f++) {
-						if ( times[f] == 'Averages' ) {
-							output += '<td class="text-center"></td>';
-						} else {
-							output += '<td class="text-center">'+numberWithCommas( ( averages[metrics[m].text][times[f]]/outlets.length ).toFixed(1) )+'</td>';
-						}
-					}
-					output += '</tr>';
+				output += '<tr>';
+				if ( m == 0 ) {
+					output += '<th rowspan="5" scope="row" class="text-center align-middle">All Stations<br />(Average)</th>';
 				}
+				output += '<td><strong>'+metrics[m].title+'</strong></td>';
+
+				for (f=0; f<times.length; f++) {
+					if ( times[f] == 'Averages' ) {
+						output += '<td class="text-center">'+numberWithCommas( ( avgMeta[metrics[m].text]/outlets.length ).toFixed(1) )+'</td>';
+					} else {
+						output += '<td class="text-center">'+numberWithCommas( ( averages[metrics[m].text][times[f]]/outlets.length ).toFixed(1) )+'</td>';
+					}
+				}
+				output += '</tr>';
+			}
 			return output;
 		}
 	}
