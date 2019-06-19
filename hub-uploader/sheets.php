@@ -6,15 +6,13 @@
 		[ 'slug' => 'aqh-persons', 'name' => 'AQH Persons' ],
 		[ 'slug' => 'aqh-rtg', 'name' => 'AQH Rating %' ],
 		[ 'slug' => 'share', 'name' => 'Share %' ],
-		[ 'slug' => 'avg-wk-cume', 'name' => 'Average Weekly Cume' ],
-		[ 'slug' => 'pumm', 'name' => 'PUMM' ]
+		[ 'slug' => 'avg-wk-cume', 'name' => 'Average Weekly Cume' ]
 	];
 	$ros_avg = [
 		'aqh-persons' => [],
 		'aqh-rtg' => [],
 		'share' => [],
-		'avg-wk-cume' => [],
-		'pumm' => []
+		'avg-wk-cume' => []
 	];
 	$nc_avg = [];
 	foreach ( $times as $tt ) :
@@ -24,11 +22,11 @@
 		endforeach;
 	endforeach;
 
-	$station_headers = [ 'Timeframe', 'AQH Persons', 'AQH Rating %', 'Share %', 'Average Weekly Cume', 'PUMM' ];
+	$station_headers = [ 'Timeframe', 'AQH Persons', 'AQH Rating %', 'Share %', 'Average Weekly Cume' ];
 	$sheets = [
 		'Broadcast Overview' => [
 			[ 'Broadcast Overview (Run-of-Station)', '', '', '', '', '' ],
-			[ 'Station', 'AQH Persons', 'AQH Rating %', 'Share %', 'Average Weekly Cume', 'PUMM' ]
+			[ 'Station', 'AQH Persons', 'AQH Rating %', 'Share %', 'Average Weekly Cume' ]
 		],
 		'Newscasts Summary' => [
 			[ 'Newscasts Summary', '', '', '', '', '', '', '', '' ],
@@ -43,8 +41,7 @@
 				$kv['ROS']['aqh-persons'],
 				$kv['ROS']['aqh-rtg'],
 				$kv['ROS']['share'],
-				$kv['ROS']['avg-wk-cume'],
-				$kv['ROS']['pumm']
+				$kv['ROS']['avg-wk-cume']
 			];
 			foreach( $ros_avg as $rk => $rv ) :
 				$ros_avg[$rk][] = $kv['ROS'][$rk];

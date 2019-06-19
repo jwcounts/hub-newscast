@@ -70,7 +70,7 @@ export default {
 				for (m=0; m<metrics.length; m++) {
 					output += '<tr>';
 					if ( m == 0 ) {
-						output += '<th rowspan="5" scope="row" class="text-center align-middle">'+outlets[s].toUpperCase()+'</th>';
+						output += '<th rowspan="4" scope="row" class="text-center align-middle">'+outlets[s].toUpperCase()+'</th>';
 					}
 					output += '<td><strong>'+metrics[m].title+'</strong></td>';
 
@@ -89,7 +89,7 @@ export default {
 			for (m=0; m<metrics.length; m++) {
 				output += '<tr>';
 				if ( m == 0 ) {
-					output += '<th rowspan="5" scope="row" class="text-center align-middle">All Stations<br />(Average)</th>';
+					output += '<th rowspan="4" scope="row" class="text-center align-middle">All Stations<br />(Average)</th>';
 				}
 				output += '<td><strong>'+metrics[m].title+'</strong></td>';
 

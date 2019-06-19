@@ -37,7 +37,6 @@
 						<bar-chart :chart-data="pullOutlet(item.text,chartData,'aqh-rtg')" :options="renderOptions('aqh-rtg')"></bar-chart>
 						<bar-chart :chart-data="pullOutlet(item.text,chartData,'share')" :options="renderOptions('share')"></bar-chart>
 						<bar-chart :chart-data="pullOutlet(item.text,chartData,'avg-wk-cume')" :options="renderOptions('avg-wk-cume')"></bar-chart>
-						<bar-chart :chart-data="pullOutlet(item.text,chartData,'pumm')" :options="renderOptions('pumm')"></bar-chart>
 					</template>
 				</div>
 			</div>
@@ -170,8 +169,6 @@ export default {
 				title = 'Share %';
 			} else if ( metric == 'avg-wk-cume' ) {
 				title = 'Average Weekly Cume';
-			} else if ( metric == 'pumm' ) {
-				title = 'Persons Using Measured Media (PUMM)';
 			}
 			return {
 				elements: {

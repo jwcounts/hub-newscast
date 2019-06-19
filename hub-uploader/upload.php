@@ -100,8 +100,6 @@
 							$headers['share'] = $k;
 						elseif ( trim( $v ) == 'AVG WK Cume' ) :
 							$headers['avg-wk-cume'] = $k;
-						elseif ( trim( $v ) == 'PUMM' ) :
-							$headers['pumm'] = $k;
 						endif;
 					endforeach;
 				elseif ( preg_match( '/^[A-Z\-]{5,7}$/', $d['B'] ) ) :
@@ -147,8 +145,7 @@
 								'aqh-persons' => str_replace( ',', '', $d[$headers['aqh-persons']] ),
 								'aqh-rtg' => $d[$headers['aqh-rtg']],
 								'share' => $d[$headers['share']],
-								'avg-wk-cume' => str_replace( ',', '', $d[$headers['avg-wk-cume']] ),
-								'pumm' => str_replace( ',', '', $d[$headers['pumm']] )
+								'avg-wk-cume' => str_replace( ',', '', $d[$headers['avg-wk-cume']] )
 							];
 						endif;
 					else :
@@ -157,8 +154,7 @@
 							'aqh-persons' => str_replace( ',', '', $d[$headers['aqh-persons']] ),
 							'aqh-rtg' => $d[$headers['aqh-rtg']],
 							'share' => $d[$headers['share']],
-							'avg-wk-cume' => str_replace( ',', '', $d[$headers['avg-wk-cume']] ),
-							'pumm' => str_replace( ',', '', $d[$headers['pumm']] )
+							'avg-wk-cume' => str_replace( ',', '', $d[$headers['avg-wk-cume']] )
 						];
 					endif;
 				endif;
@@ -170,15 +166,13 @@
 						$avg_aqh_rtg[] = $tp['during']['aqh-rtg'];
 						$avg_share[] = $tp['during']['share'];
 						$avg_wk_cume[] = $tp['during']['avg-wk-cume'];
-						$avg_pumm[] = $tp['during']['pumm'];
 					endif;
 				endforeach;
 				$temp[ $station ][ 'Averages' ] = [
 					'aqh-persons' => round( array_sum( $avg_aqh ) / count( $avg_aqh ), 0 ),
 					'aqh-rtg' => round( array_sum( $avg_aqh_rtg ) / count( $avg_aqh_rtg ), 1 ),
 					'share' => round( array_sum( $avg_share ) / count( $avg_share ), 1 ),
-					'avg-wk-cume' => round( array_sum( $avg_wk_cume ) / count( $avg_wk_cume ), 0 ),
-					'pumm' => round( array_sum( $avg_pumm ) / count( $avg_pumm ), 0 ),
+					'avg-wk-cume' => round( array_sum( $avg_wk_cume ) / count( $avg_wk_cume ), 0 )
 				];
 			endif;
 			file_put_contents( $filepath, json_encode( $temp ) );
