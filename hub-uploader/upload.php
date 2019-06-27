@@ -64,7 +64,7 @@
 			endif;
 			$spreadsheet = \PhpOffice\PhpSpreadsheet\IOFactory::load( $tempFile );
 			$data = $spreadsheet->getActiveSheet()->toArray( null, true, true, true );
-			$headers = $avg_aqh = $avg_aqh_rtg = $avg_share = $avg_wk_cume = $avg_pumm = [];
+			$headers = $avg_aqh = $avg_aqh_rtg = $avg_share = $avg_wk_cume = [];
 			foreach( $data as $d ) :
 				if ( preg_match( '/([A-Z]+) ([0-9]{4}) \- Dates In\(([0-9]{8}) to ([0-9]{8})\)/', $d['B'], $match ) ) :
 					$start = mktime( 0, 0, 0, substr( $match[3], 0, 2 ), substr( $match[3], 2, 2 ), substr( $match[3], 4, 4 ) );
@@ -90,7 +90,7 @@
 							'download' => $excel_file
 						];
 					endif;
-				elseif ( $d['A'] == 'Rank' ) :
+				elseif ( trim( $d['A'] ) == 'Rank' ) :
 					foreach ( $d as $k => $v ) :
 						if ( trim( $v ) == 'AQH Persons' ) :
 							$headers['aqh-persons'] = $k;
@@ -100,12 +100,16 @@
 							$headers['share'] = $k;
 						elseif ( trim( $v ) == 'AVG WK Cume' ) :
 							$headers['avg-wk-cume'] = $k;
+						elseif ( trim( $v ) == 'Time Period' ) :
+							$headers['time-period'] = $k;
+						elseif ( trim( $v ) == 'Outlet' ) :
+							$headers['outlet'] = $k;
 						endif;
 					endforeach;
-				elseif ( preg_match( '/^[A-Z\-]{5,7}$/', $d['B'] ) ) :
-					$station = strtolower( $d['B'] );
-					if ( count( $data ) > 30 && preg_match( '/Mo\-Fr [0-9:\-AP]+/', $d['E'] ) ) :
-						$date = explode( ' ', $d['E'] );
+				elseif ( preg_match( '/^[A-Z\-]{6,7}$/', trim( $d[ $headers['outlet'] ] ) ) ) :
+					$station = strtolower( $d[ $headers['outlet'] ] );
+					if ( count( $data ) > 30 && preg_match( '/Mo\-Fr [0-9:\-AP]+/', $d[ $headers['time-period'] ] ) ) :
+						$date = explode( ' ', $d[ $headers['time-period'] ] );
 						$dp_start = explode( '-', $date[1] );
 						if ( !preg_match( '/:/', $dp_start[0] ) ) :
 							$dp_start[0] = str_replace( [ 'A', 'P' ], [ ':00A', ':00P' ], $dp_start[0] );
@@ -175,6 +179,7 @@
 					'avg-wk-cume' => round( array_sum( $avg_wk_cume ) / count( $avg_wk_cume ), 0 )
 				];
 			endif;
+
 			file_put_contents( $filepath, json_encode( $temp ) );
 			$reports = [];
 			krsort( $reportWeeks );

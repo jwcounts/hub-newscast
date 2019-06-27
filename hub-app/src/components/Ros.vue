@@ -57,7 +57,7 @@ export default {
 						output += '<th scope="row" class="text-center align-middle">'+outlets[s].toUpperCase()+'</th>';
 					}
 					output += '<td class="text-center">'+numberWithCommas( chartData[outlets[s]]['ROS'][metrics[m].text] )+'</td>';
-					averages[metrics[m].text] = averages[metrics[m].text] + Number( chartData[outlets[s]]['ROS'][metrics[m].text] );
+					averages[metrics[m].text] = Number( averages[metrics[m].text] ) + Number( chartData[outlets[s]]['ROS'][metrics[m].text] );
 				}
 				output += '</tr>';
 			}
@@ -66,7 +66,7 @@ export default {
 				if ( m == 0 ) {
 					output += '<th scope="row" class="text-center align-middle">All Stations<br />(Average)</th>';
 				}
-				output += '<td class="text-center">'+numberWithCommas( ( averages[metrics[m].text]/outlets.length ).toFixed(1) )+'</td>';
+				output += '<td class="text-center">'+numberWithCommas( ( Number( averages[metrics[m].text] )/outlets.length ).toFixed(1) )+'</td>';
 			}
 			output += '</tr>';
 			return output;

@@ -77,10 +77,10 @@ export default {
 					for (f=0; f<times.length; f++) {
 						if ( times[f] == 'Averages' ) {
 							output += '<td class="text-center">'+numberWithCommas( chartData[outlets[s]][times[f]][metrics[m].text] )+'</td>';
-							avgMeta[metrics[m].text] = avgMeta[metrics[m].text] + Number( chartData[outlets[s]][times[f]][metrics[m].text] );
+							avgMeta[metrics[m].text] = Number( avgMeta[metrics[m].text] ) + Number( chartData[outlets[s]][times[f]][metrics[m].text] );
 						} else {
 							output += '<td class="text-center">'+numberWithCommas( chartData[outlets[s]][times[f]]['during'][metrics[m].text] )+'</td>';
-							averages[metrics[m].text][times[f]] = averages[metrics[m].text][times[f]] + Number( chartData[outlets[s]][times[f]]['during'][metrics[m].text] );
+							averages[metrics[m].text][times[f]] = Number( averages[metrics[m].text][times[f]] ) + Number( chartData[outlets[s]][times[f]]['during'][metrics[m].text] );
 						}
 					}
 					output += '</tr>';
