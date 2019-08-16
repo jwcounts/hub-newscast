@@ -9,6 +9,8 @@ hub-uploader/data/*
 !hub-uploader/data/excel/.gitkeep
 hup-uploader/uploads/
 *.xls
+*.xlsx
+*.csv
 *-test.php
 
 # local env files

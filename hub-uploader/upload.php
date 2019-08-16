@@ -17,7 +17,40 @@
 		'4:30P-4:45P',
 		'5:30P-5:45P'
 	];
-	
+
+	$orgs = [
+		220 => 'kuhf-fm',
+		77 => 'kera-fm',
+		188 => 'kstx-fm',
+		252 => 'kut-fm'
+	];
+	$hours = [
+		8 => [
+			'sector' => 40,
+			'airtime' => '7:31 AM'
+		],
+		9 => [
+			'sector' => 40,
+			'airtime' => '8:31 AM'
+		],
+		11 => [
+			'sector' => 40,
+			'airtime' => '10:30 AM'
+		],
+		14 => [
+			'sector' => 10,
+			'airtime' => '1:04 PM'
+		],
+		17 => [
+			'sector' => 40,
+			'airtime' => '4:32 PM'
+		],
+		18 => [
+			'sector' => 40,
+			'airtime' => '5:32 PM'
+		]
+	];
+
 	$ds = DIRECTORY_SEPARATOR;
 
 	/**
@@ -37,7 +70,7 @@
 	$data_path = env( 'DATA_PATH' );
 
 	$reportsFile = $data_path . 'reports.json';
-	
+
 	foreach ( $times as $tr ) :
 		$exp = explode( '-', $tr );
 		if ( !preg_match( '/:/', $exp[0] ) ) :
@@ -56,152 +89,44 @@
 		endforeach;
 	endif;
 
-	if ( !empty( $_SESSION['pin'] ) && $_SESSION['pin'] === $password ) :
-		if ( !empty( $_FILES ) ) :
-			if ( !empty( $_FILES['acd'] ) ) :
-				$filename = $_FILES['acd']['name'];
-				$tempFile = $_FILES['acd']['tmp_name'];
-			endif;
-			$spreadsheet = \PhpOffice\PhpSpreadsheet\IOFactory::load( $tempFile );
-			$data = $spreadsheet->getActiveSheet()->toArray( null, true, true, true );
-			$headers = $avg_aqh = $avg_aqh_rtg = $avg_share = $avg_wk_cume = [];
-			foreach( $data as $d ) :
-				if ( preg_match( '/([A-Z]+) ([0-9]{4}) \- Dates In\(([0-9]{8}) to ([0-9]{8})\)/', $d['B'], $match ) ) :
-					$start = mktime( 0, 0, 0, substr( $match[3], 0, 2 ), substr( $match[3], 2, 2 ), substr( $match[3], 4, 4 ) );
-					$week = $match[1].' '.$match[2];
-
-					$start_date = substr( $match[3], 0, 2 ) . '/' . substr( $match[3], 2, 2 ) . '/' . substr( $match[3], 4, 4 );
-					$end_date = substr( $match[4], 0, 2 ) . '/' . substr( $match[4], 2, 2 ) . '/' . substr( $match[4], 4, 4 );
-
-					$report_date = date( 'Y-m-d', $start );
-					$filepath = $data_path . $report_date . '.json';
-					if ( file_exists( $filepath ) ) :
-						$temp = json_decode( file_get_contents( $filepath ), true );
-					else :
-						$temp = [];
-					endif;
-
-					$excel_file = $match[1].'_'.$match[2].'-Newscast_Summary.xlsx';
-					$excel_file_path = $data_path . 'excel' . $ds . $excel_file;
-
-					if ( empty( $reportWeeks[ $report_date ] ) ) :
-						$reportWeeks[ $report_date ] = [
-							'text' => ucwords( strtolower( $week ) ) . ' (' . $start_date . '-' . $end_date . ')',
-							'download' => $excel_file
-						];
-					endif;
-				elseif ( trim( $d['A'] ) == 'Rank' ) :
-					foreach ( $d as $k => $v ) :
-						if ( trim( $v ) == 'AQH Persons' ) :
-							$headers['aqh-persons'] = $k;
-						elseif ( trim( $v ) == 'AQH Rtg%' ) :
-							$headers['aqh-rtg'] = $k;
-						elseif ( trim( $v ) == 'Share%' ) :
-							$headers['share'] = $k;
-						elseif ( trim( $v ) == 'AVG WK Cume' ) :
-							$headers['avg-wk-cume'] = $k;
-						elseif ( trim( $v ) == 'Time Period' ) :
-							$headers['time-period'] = $k;
-						elseif ( trim( $v ) == 'Outlet' ) :
-							$headers['outlet'] = $k;
-						endif;
-					endforeach;
-				elseif ( preg_match( '/^[A-Z\-]{6,7}$/', trim( $d[ $headers['outlet'] ] ) ) ) :
-					$station = strtolower( $d[ $headers['outlet'] ] );
-					if ( count( $data ) > 30 && preg_match( '/Mo\-Fr [0-9:\-AP]+/', $d[ $headers['time-period'] ] ) ) :
-						$date = explode( ' ', $d[ $headers['time-period'] ] );
-						$dp_start = explode( '-', $date[1] );
-						if ( !preg_match( '/:/', $dp_start[0] ) ) :
-							$dp_start[0] = str_replace( [ 'A', 'P' ], [ ':00A', ':00P' ], $dp_start[0] );
-						endif;
-						$row_unix = strtotime( $seed . $dp_start[0] . 'M' );
-						$dayp = false;
-						$qh = $qh_rel = '';
-
-						foreach ( $times_unix as $tu ) :
-							if ( $row_unix == $tu['unix'] ) :
-								$qh = $tu['text'];
-								$qh_rel = 'during';
-								$dayp = true;
-							elseif ( ( $row_unix - 900 ) == $tu['unix'] ) :
-								$qh = $tu['text'];
-								$qh_rel = 'after';
-								$dayp = true;
-							elseif ( ( $row_unix + 900 ) == $tu['unix'] ) :
-								$qh = $tu['text'];
-								$qh_rel = 'before';
-								$dayp = true;
-							endif;
-						endforeach;
-
-						if ( $dayp ) :
-							if ( empty( $temp[ $station ] ) ) :
-								$temp[ $station ] = [];
-								foreach ( $times as $t ) :
-									$temp[ $station ][ $t ] = [
-										'before' => [],
-										'during' => [],
-										'after' => []
-									];
-								endforeach;
-							endif;
-							$temp[ $station ][ $qh ][ $qh_rel ] = [
-								'aqh-persons' => str_replace( ',', '', $d[$headers['aqh-persons']] ),
-								'aqh-rtg' => $d[$headers['aqh-rtg']],
-								'share' => $d[$headers['share']],
-								'avg-wk-cume' => str_replace( ',', '', $d[$headers['avg-wk-cume']] )
-							];
-						endif;
-					else :
-						$ros = true;
-						$temp[ $station ]['ROS'] = [
-							'aqh-persons' => str_replace( ',', '', $d[$headers['aqh-persons']] ),
-							'aqh-rtg' => $d[$headers['aqh-rtg']],
-							'share' => $d[$headers['share']],
-							'avg-wk-cume' => str_replace( ',', '', $d[$headers['avg-wk-cume']] )
-						];
-					endif;
-				endif;
-			endforeach;
-			if ( !$ros ) :
-				foreach ( $temp[ $station ] as $tk => $tp ) :
-					if ( $tk !== 'Averages' && $tk !== 'ROS' ) :
-						$avg_aqh[] = $tp['during']['aqh-persons'];
-						$avg_aqh_rtg[] = $tp['during']['aqh-rtg'];
-						$avg_share[] = $tp['during']['share'];
-						$avg_wk_cume[] = $tp['during']['avg-wk-cume'];
-					endif;
-				endforeach;
-				$temp[ $station ][ 'Averages' ] = [
-					'aqh-persons' => round( array_sum( $avg_aqh ) / count( $avg_aqh ), 0 ),
-					'aqh-rtg' => round( array_sum( $avg_aqh_rtg ) / count( $avg_aqh_rtg ), 1 ),
-					'share' => round( array_sum( $avg_share ) / count( $avg_share ), 1 ),
-					'avg-wk-cume' => round( array_sum( $avg_wk_cume ) / count( $avg_wk_cume ), 0 )
-				];
-			endif;
-
-			file_put_contents( $filepath, json_encode( $temp ) );
-			$reports = [];
-			krsort( $reportWeeks );
-			foreach ( $reportWeeks as $rk => $rv ) :
-				$reports[] = [
-					'text' => $rv['text'],
-					'value' => $rk,
-					'download' => $rv['download']
-				];
-			endforeach;
-			file_put_contents( $reportsFile, json_encode( $reports ) );
-
-			require __DIR__ . $ds . 'sheets.php';
-
-			$result = [
-				'message' => '<p>Data has been updated. <a href="/hub/">Check it out here</a>.</p>'
-			];
-			header('Content-type: application/json');
-			echo json_encode( $result );
-		endif;
-	else :
+	if ( empty( $_SESSION['pin'] ) || $_SESSION['pin'] !== $password ) :
 		header("HTTP/1.1 403 Forbidden");
 		echo '<p>You are not authorized to upload files. Please refresh and reenter your password.</p>';
 		die;
+	endif;
+	if ( !empty( $_FILES ) ) :
+		if ( !empty( $_FILES['acd'] ) ) :
+			$filename = $_FILES['acd']['name'];
+			$tempFile = $_FILES['acd']['tmp_name'];
+		endif;
+
+		if ( $_FILES['acd']['type'] == 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' || $_FILES['acd']['type'] == 'application/octet-stream' ) :
+			require __DIR__ . $ds . 'excel.php';
+		elseif ( $_FILES['acd']['type'] == 'text/csv' ) :
+			require __DIR__ . $ds . 'csv.php';
+		else :
+			header("HTTP/1.1 403 Forbidden");
+			echo '<p>Unsupported file type. Please try again with a supported type.</p>';
+			die;
+		endif;
+
+		require __DIR__ . $ds . 'sheets.php';
+
+		file_put_contents( $filepath, json_encode( $temp ) );
+		$reports = [];
+		krsort( $reportWeeks );
+		foreach ( $reportWeeks as $rk => $rv ) :
+			$reports[] = [
+				'text' => $rv['text'],
+				'value' => $rk,
+				'download' => $rv['download']
+			];
+		endforeach;
+		file_put_contents( $reportsFile, json_encode( $reports ) );
+
+		$result = [
+			'message' => '<p>Data has been updated. <a href="/hub/">Check it out here</a>.</p>'
+		];
+		header('Content-type: application/json');
+		echo json_encode( $result );
 	endif;

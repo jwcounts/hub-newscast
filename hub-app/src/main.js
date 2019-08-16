@@ -32,10 +32,17 @@ window.parseStations = function(data) {
 		{ title: 'Broadcast Overview', text: 'ros' },
 		{ title: 'Newscasts Summary', text: 'overall' }
 	]
+	var digital = false;
 	for (var d in data ) {
-		if (typeof data[d] === 'object') {
+		if (typeof data[d] === 'object' && typeof data[d]['7:30A-7:45A'] === 'object') {
 			currentStation.push( { title: d.toUpperCase() + ' Newscasts', text: d.toLowerCase() } );
 		}
+		if (typeof data[d]['digital'] === 'object') {
+			digital = true;
+		}
+	}
+	if ( digital ) {
+		currentStation.push( { title: 'Digital Overview', text: 'digital' } );
 	}
 	return currentStation;
 }

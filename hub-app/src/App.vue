@@ -32,6 +32,9 @@
 					<template v-else-if="item.text == 'ros' ">
 						<Ros :chart-data="chartData"></Ros>
 					</template>
+					<template v-else-if="item.text == 'digital' ">
+						<Digital :chart-data="chartData"></Digital>
+					</template>
 					<template v-else>
 						<bar-chart :chart-data="pullOutlet(item.text,chartData,'aqh-persons')" :options="renderOptions('aqh-persons')"></bar-chart>
 						<bar-chart :chart-data="pullOutlet(item.text,chartData,'aqh-rtg')" :options="renderOptions('aqh-rtg')"></bar-chart>
@@ -52,6 +55,7 @@
 import Overall from '@/components/Overall'
 import Ros from '@/components/Ros'
 import BarChart from '@/components/BarChart'
+import Digital from '@/components/Digital'
 export default {
 	name: 'App',
 	props: [
@@ -60,7 +64,8 @@ export default {
 	components: {
 		Overall,
 		Ros,
-		BarChart
+		BarChart,
+		Digital
 	},
 	data() {
 		return {
@@ -150,7 +155,7 @@ export default {
 				}]
 			};
 			for (var d in data ) {
-				if ( typeof data[d] === 'object' && d !== 'Averages' && d !== 'ROS' ) {
+				if ( typeof data[d] === 'object' && d !== 'Averages' && d !== 'ROS' && d !== 'digital' ) {
 					output.labels.push(d);
 					output.datasets[0].data.push( data[d]['before'][metric] );
 					output.datasets[1].data.push( data[d]['during'][metric] );
@@ -311,6 +316,10 @@ label.form-check-label {
 	background-color: rgba(15,185,24,0.2);
 	border-top: 2px solid rgba(15,185,24,1);
 }
+#tab div.digital {
+	background-color: rgba(230,131,2,0.2);
+	border-top: 2px solid rgba(230,131,2,1);
+}
 #tab div.tab-active {
 	font-weight: bolder;
 	color: white;
@@ -332,6 +341,9 @@ label.form-check-label {
 }
 #tab div.tab-active.ros {
 	background-color: rgba(15,185,24,0.75);
+}
+#tab div.tab-active.digital {
+	background-color: rgba(230,131,2,0.75);
 }
 #chart-wrap {
 	position: relative;

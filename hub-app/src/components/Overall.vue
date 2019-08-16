@@ -29,7 +29,7 @@ export default {
 				outlets.push(d);
 			}
 			for (var o in chartData[outlets[0]]) {
-				if ( o != 'ROS' ) {
+				if ( o != 'ROS' && o != 'digital' ) {
 					times.push(o);
 				}
 			}
@@ -50,9 +50,12 @@ export default {
 				outlets.push(c);
 			}
 			for (var o in chartData[outlets[0]]) {
-				if ( o !== 'ROS' ) {
+				if ( o !== 'ROS' && o != 'digital' ) {
 					times.push(o);
 				}
+			}
+			if (times.length == 0) {
+				return "No broadcast data has been uploaded for this month yet.";
 			}
 			for (var t in chartData[outlets[0]][times[0]]['during']) {
 				metrics.push({text: t, title: t.replace('-', ' ').toUpperCase()});

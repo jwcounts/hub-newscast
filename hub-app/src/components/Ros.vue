@@ -47,6 +47,9 @@ export default {
 			for (var t in chartData[outlets[0]]['ROS']) {
 				metrics.push({text: t, title: t.replace('-', ' ').toUpperCase()});
 			}
+			if (metrics.length == 0) {
+				return "No broadcast data has been uploaded for this month yet.";
+			}
 			for (m=0; m<metrics.length; m++) {
 				averages[metrics[m].text] = [];
 			}

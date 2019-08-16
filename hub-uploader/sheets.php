@@ -14,12 +14,16 @@
 		'share' => [],
 		'avg-wk-cume' => []
 	];
-	$nc_avg = [];
+	$nc_avg = $digi_over_avg = [];
 	foreach ( $times as $tt ) :
 		$nc_avg[ $tt ] = [];
 		foreach ( $metrics as $mt ) :
 			$nc_avg[ $tt ][ $mt['slug'] ] = [];
 		endforeach;
+	endforeach;
+
+	foreach ( $hours as $hh ) :
+		$digi_over_avg[ $hh['airtime'] ] = 0;
 	endforeach;
 
 	$station_headers = [ 'Timeframe', 'AQH Persons', 'AQH Rating %', 'Share %', 'Average Weekly Cume' ];
@@ -31,8 +35,23 @@
 		'Newscasts Summary' => [
 			[ 'Newscasts Summary', '', '', '', '', '', '', '', '' ],
 			[ 'Station', 'Metric', '7:30A-7:45A', '8:30A-8:45A', '10:30A-10:45A', '1P-1:15P', '4:30P-4:45P', '5:30P-5:45P',   'Averages' ]
+		],
+		'Digital Summary' => [
+			[ 'Digital Downloads', '', '', '', '', '', '', '', '' ],
+			[ 'Station', '7:31 AM', '8:31 AM', '10:30 AM', '1:04 PM', '4:32 PM', '5:32 PM', 'Station Total', 'Station Average' ]
 		]
 	];
+
+	// Determine if broadcast data is available in the $temp array
+	$broadcast_ranges = false;
+	foreach ( $temp as $kt => $kv ) :
+		foreach ( $times as $tt ) :
+			if ( !empty( $kv[$tt] ) ) :
+				$broadcast_ranges = true;
+			endif;
+		endforeach;
+	endforeach;
+
 	foreach ( $temp as $kt => $kv ) :
 		// Add station row to ROS sheet
 		if ( !empty( $kv['ROS'] ) ) :
@@ -48,77 +67,110 @@
 			endforeach;
 		endif;
 
-		// Add station rows to newscast summary sheet
-		for ( $i = 0; $i < count( $metrics ); $i ++ ) :
-			$met_temp = [];
-			if ( $i == 0 ) :
-				$met_temp[] = strtoupper( $kt );
-			else :
-				$met_temp[] = '';
-			endif;
-			$met_temp[] = $metrics[$i]['name'];
-			foreach ( $times as $tt ) :
-				$met_temp[] = $kv[$tt]['during'][ $metrics[$i]['slug'] ];
-				$nc_avg[ $tt ][ $metrics[$i]['slug'] ][] = $kv[$tt]['during'][ $metrics[$i]['slug'] ];
-			endforeach;
-			$met_temp[] = $kv['Averages'][ $metrics[$i]['slug'] ];
-			$sheets['Newscasts Summary'][] = $met_temp;
-		endfor;
-
-		// Add station sheet with all newscast numbers
-		$sheet_name = strtoupper( $kt ) . ' Newscasts';
-		$sheets[ $sheet_name ][] = [
-			$sheet_name, '', '', '', '', ''
-		];
-		$sheets[ $sheet_name ][] = $station_headers;
-		foreach ( $times as $tt ) :
-			$before_temp = $during_temp = $after_temp = [];
-			$ttx = explode( '-', $tt );
-			$du_start = strtotime( $seed . $ttx[0] . 'M' );
-			$du_end = strtotime( $seed . $ttx[1] . 'M' );
-			$during = date( 'g:iA', $du_start ) . '-' . date( 'g:iA', $du_end );
-			$before = date( 'g:iA', $du_start - 900 ) . '-' . date( 'g:iA', $du_start );
-			$after = date( 'g:iA', $du_end ) . '-' . date( 'g:iA', $du_end + 900 );
-			$before_temp[] = $before;
-			$during_temp[] = $during;
-			$after_temp[] = $after;
+		// If broadcast data is present, parse and format for the Excel output
+		if ( $broadcast_ranges ) :
+			// Add station rows to newscast summary sheet
 			for ( $i = 0; $i < count( $metrics ); $i ++ ) :
-				$before_temp[] = $kv[$tt]['before'][ $metrics[$i]['slug'] ];
-				$during_temp[] = $kv[$tt]['during'][ $metrics[$i]['slug'] ];
-				$after_temp[] = $kv[$tt]['after'][ $metrics[$i]['slug'] ];
+				$met_temp = [];
+				if ( $i == 0 ) :
+					$met_temp[] = strtoupper( $kt );
+				else :
+					$met_temp[] = '';
+				endif;
+				$met_temp[] = $metrics[$i]['name'];
+				foreach ( $times as $tt ) :
+					$met_temp[] = $kv[$tt]['during'][ $metrics[$i]['slug'] ];
+					$nc_avg[ $tt ][ $metrics[$i]['slug'] ][] = $kv[$tt]['during'][ $metrics[$i]['slug'] ];
+				endforeach;
+				$met_temp[] = $kv['Averages'][ $metrics[$i]['slug'] ];
+				$sheets['Newscasts Summary'][] = $met_temp;
 			endfor;
-			$sheets[ $sheet_name ][] = $before_temp;
-			$sheets[ $sheet_name ][] = $during_temp;
-			$sheets[ $sheet_name ][] = $after_temp;
-		endforeach;
+
+			// Add station sheet with all newscast numbers
+			$sheet_name = strtoupper( $kt ) . ' Newscasts';
+			$sheets[ $sheet_name ][] = [
+				$sheet_name, '', '', '', '', ''
+			];
+			$sheets[ $sheet_name ][] = $station_headers;
+			foreach ( $times as $tt ) :
+				$before_temp = $during_temp = $after_temp = [];
+				$ttx = explode( '-', $tt );
+				$du_start = strtotime( $seed . $ttx[0] . 'M' );
+				$du_end = strtotime( $seed . $ttx[1] . 'M' );
+				$during = date( 'g:iA', $du_start ) . '-' . date( 'g:iA', $du_end );
+				$before = date( 'g:iA', $du_start - 900 ) . '-' . date( 'g:iA', $du_start );
+				$after = date( 'g:iA', $du_end ) . '-' . date( 'g:iA', $du_end + 900 );
+				$before_temp[] = $before;
+				$during_temp[] = $during;
+				$after_temp[] = $after;
+				for ( $i = 0; $i < count( $metrics ); $i ++ ) :
+					$before_temp[] = $kv[$tt]['before'][ $metrics[$i]['slug'] ];
+					$during_temp[] = $kv[$tt]['during'][ $metrics[$i]['slug'] ];
+					$after_temp[] = $kv[$tt]['after'][ $metrics[$i]['slug'] ];
+				endfor;
+				$sheets[ $sheet_name ][] = $before_temp;
+				$sheets[ $sheet_name ][] = $during_temp;
+				$sheets[ $sheet_name ][] = $after_temp;
+			endforeach;
+		endif;
+
+		// If digital metrics are present, parse and format for Excel
+		if ( !empty( $kv['digital'] ) ) :
+			$digi_temp = [];
+			$digi_temp[] = strtoupper( $kt );
+			foreach ( $kv['digital'] as $dk => $dv ) :
+				$digi_temp[] = (int)$dv;
+				if ( $dk !== 'Average' && $dk !== 'Total' ) :
+					$digi_over_avg[ $dk ] += $dv;
+				endif;
+			endforeach;
+			$sheets['Digital Summary'][] = $digi_temp;
+		endif;
 	endforeach;
 
-	// Adding all station averages to the ROS sheet
-	if ( count( $sheets['Broadcast Overview'] ) > 2 ) :
-		$ros_temp = [ 'All Stations (Average)' ];
-		foreach ( $ros_avg as $ra ) :
-			$ros_temp[] = round( array_sum( $ra ) / count( $ra ), 1 );
-		endforeach;
-		$sheets['Broadcast Overview'][] = $ros_temp;
+	if ( $broadcast_ranges ) :
+		// Adding all station averages to the ROS sheet
+		if ( count( $sheets['Broadcast Overview'] ) > 3 ) :
+			$ros_temp = [ 'All Stations (Average)' ];
+			foreach ( $ros_avg as $ra ) :
+				$ros_temp[] = round( array_sum( $ra ) / count( $ra ), 1 );
+			endforeach;
+			$sheets['Broadcast Overview'][] = $ros_temp;
+		endif;
+
+		// Adding all station averages to the Newscast summary sheet
+		for ( $i = 0; $i < count( $metrics ); $i ++ ) :
+			$nc_temp = $nc_meta = [];
+			if ( $i == 0 ) :
+				$nc_temp[] = 'All Stations (Averages)';
+			else :
+				$nc_temp[] = '';
+			endif;
+			$nc_temp[] = $metrics[$i]['name'];
+			foreach ( $times as $tt ) :
+				$nc_temp[] = round( array_sum( $nc_avg[$tt][ $metrics[$i]['slug'] ] ) / count( $nc_avg[$tt][ $metrics[$i]['slug'] ] ), 1 );
+				$nc_meta[] = round( array_sum( $nc_avg[$tt][ $metrics[$i]['slug'] ] ) / count( $nc_avg[$tt][ $metrics[$i]['slug'] ] ), 1 );
+			endforeach;
+			$nc_temp[] = round( array_sum( $nc_meta ) / count( $nc_meta ), 1 );
+			$sheets['Newscasts Summary'][] = $nc_temp;
+		endfor;
 	endif;
 
-	// Adding all station averages to the Newscast summary sheet
-	for ( $i = 0; $i < count( $metrics ); $i ++ ) :
-		$nc_temp = $nc_meta = [];
-		if ( $i == 0 ) :
-			$nc_temp[] = 'All Stations (Averages)';
-		else :
-			$nc_temp[] = '';
-		endif;
-		$nc_temp[] = $metrics[$i]['name'];
-		foreach ( $times as $tt ) :
-			$nc_temp[] = round( array_sum( $nc_avg[$tt][ $metrics[$i]['slug'] ] ) / count( $nc_avg[$tt][ $metrics[$i]['slug'] ] ), 1 );
-			$nc_meta[] = round( array_sum( $nc_avg[$tt][ $metrics[$i]['slug'] ] ) / count( $nc_avg[$tt][ $metrics[$i]['slug'] ] ), 1 );
+	if ( !empty( $sheets['Digital Summary'][2] ) ) :
+		$digi_total_temp = [ 'Timeslot Totals' ];
+		$digi_avg_temp = [ 'Timeslot Averages' ];
+		foreach ( $hours as $hh ) :
+			$digi_total_temp[] = $digi_over_avg[ $hh['airtime'] ];
+			$digi_avg_temp[] = round( $digi_over_avg[ $hh['airtime'] ] / count( $temp ), 0 );
 		endforeach;
-		$nc_temp[] = round( array_sum( $nc_meta ) / count( $nc_meta ), 1 );
-		$sheets['Newscasts Summary'][] = $nc_temp;
-	endfor;
-	
+		$digi_total_temp[] = array_sum( $digi_over_avg );
+		$digi_total_temp[] = '';
+		$digi_avg_temp[] = round( array_sum( $digi_over_avg) / count( $digi_over_avg ), 0 );
+		$digi_avg_temp[] = '';
+		$sheets['Digital Summary'][] = $digi_total_temp;
+		$sheets['Digital Summary'][] = $digi_avg_temp;
+	endif;
+
 	$rsheets = array_reverse( $sheets );
 	foreach ( $rsheets as $k => $v ) :
 		$myWorkSheet = new \PhpOffice\PhpSpreadsheet\Worksheet\Worksheet( $spreadsheet, $k );

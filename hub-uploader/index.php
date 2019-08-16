@@ -72,7 +72,7 @@
 					<div class="col-sm-12">
 						<h4>Upload Your Files</h4>
 						<form action="upload.php" class="dropzone" id="acd"></form>
-						<p><i>Accepted File Types: .xls, .xlsx</i></p>
+						<p><i>Accepted File Types: .xls, .xlsx, .csv</i></p>
 					</div>
 				</div>
 			</div>
@@ -111,7 +111,7 @@
 		<script>
 			Dropzone.options.acd = {
 				paramName: "acd",
-				acceptedFiles: ".xls,.xlsx",
+				acceptedFiles: ".xls,.xlsx,.csv",
 				maxFilesize: 20,
 				init: function() {
 					this.on("error", function(file, errorMessage) {
