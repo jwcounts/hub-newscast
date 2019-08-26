@@ -42,7 +42,7 @@ window.parseStations = function(data) {
 		}
 	}
 	if ( digital ) {
-		currentStation.push( { title: 'Digital Overview', text: 'digital' } );
+		currentStation.push( { title: 'Newscast Downloads', text: 'digital' } );
 	}
 	return currentStation;
 }
