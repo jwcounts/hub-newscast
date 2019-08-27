@@ -12,6 +12,7 @@ let monthSelected = ''
 let monthExcel = ''
 let stations = []
 let monthList = []
+let rootUrl = process.env.VUE_APP_BASE_ROUTE
 
 window.getJSON = function(url, callback) {
 	var xhr = new XMLHttpRequest();
@@ -46,16 +47,16 @@ window.parseStations = function(data) {
 	}
 	return currentStation;
 }
-getJSON( "/hub/data/reports.json",
+getJSON( rootUrl + "hub/data/reports.json",
 	function(err, data) {
 		if (err !== null) {
 			console.log(err);
 		} else {
 			monthSelected = data[0].value;
-			monthExcel = '/hub/data/excel/' + data[0].download;
+			monthExcel = rootUrl + 'hub/data/excel/' + data[0].download;
 			monthList = data;
 			options = data;
-			getJSON( "/hub/data/"+monthSelected+".json",
+			getJSON( rootUrl + "hub/data/"+monthSelected+".json",
 				function(err,data) {
 					if (err !== null) {
 						console.log(err);
@@ -65,14 +66,15 @@ getJSON( "/hub/data/reports.json",
 						new Vue({
 							el: '#app',
 							components: { App },
-							template: '<App :month-selected="monthSelected" :month-excel="monthExcel" :month-list="monthList" :options="options" :chart-data="chartData" :station-list="stations"></App>',
+							template: '<App :month-selected="monthSelected" :month-excel="monthExcel" :month-list="monthList" :options="options" :chart-data="chartData" :station-list="stations" :root-url="rootUrl"></App>',
 							data: {
 								monthSelected: monthSelected,
 								options: options,
 								chartData: chartData,
 								stations: stations,
 								monthList: monthList,
-								monthExcel: monthExcel
+								monthExcel: monthExcel,
+								rootUrl: rootUrl
 							}
 						})
 					}

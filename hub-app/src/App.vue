@@ -25,17 +25,20 @@
 			</div>
 			<div id="chart-wrap">
 				<div v-for="(item, index) in stations" :id="item.text + '-service'" :class="item.text == 'overall' ? 'services service-active' : 'services'" :key="index">
-					<h2>{{ item.title }}</h2>
 					<template v-if="item.text == 'overall' ">
+						<h2>{{ item.title }}</h2>
 						<Overall :chart-data="chartData"></Overall>
 					</template>
 					<template v-else-if="item.text == 'ros' ">
+						<h2>{{ item.title }}</h2>
 						<Ros :chart-data="chartData"></Ros>
 					</template>
 					<template v-else-if="item.text == 'digital' ">
+						<h2>{{ item.title }}: {{ monthName(monthSelected) }}</h2>
 						<Digital :chart-data="chartData"></Digital>
 					</template>
 					<template v-else>
+						<h2>{{ item.title }}</h2>
 						<bar-chart :chart-data="pullOutlet(item.text,chartData,'aqh-persons')" :options="renderOptions('aqh-persons')"></bar-chart>
 						<bar-chart :chart-data="pullOutlet(item.text,chartData,'aqh-rtg')" :options="renderOptions('aqh-rtg')"></bar-chart>
 						<bar-chart :chart-data="pullOutlet(item.text,chartData,'share')" :options="renderOptions('share')"></bar-chart>
@@ -59,7 +62,7 @@ import Digital from '@/components/Digital'
 export default {
 	name: 'App',
 	props: [
-		'options', 'month-selected', 'chart-data', 'station-list', 'month-list', 'month-excel'
+		'options', 'month-selected', 'chart-data', 'station-list', 'month-list', 'month-excel', 'root-url'
 	],
 	components: {
 		Overall,
@@ -80,12 +83,12 @@ export default {
 				this.$root.monthSelected = this.month;
 				for (var e = 0; e < this.monthList.length; e++ ) {
 					if ( this.monthList[e].value == this.month ) {
-						this.$root.monthExcel = '/hub/data/excel/' + this.monthList[e].download;
+						this.$root.monthExcel = this.rootUrl + 'hub/data/excel/' + this.monthList[e].download;
 					}
 				}
 				var root = this.$root;
 				var groot = this;
-				getJSON( "/hub/data/"+this.month+".json",
+				getJSON( this.rootUrl + "hub/data/"+this.month+".json",
 					function(err,data) {
 						if (err !== null) {
 							console.log(err);
@@ -201,8 +204,13 @@ export default {
 				}
 			}
 		},
-		currentYear: function() {
-			return new Date().getFullYear();
+		monthName: function(month) {
+			for (var e = 0; e < this.monthList.length; e++ ) {
+				if ( this.monthList[e].value == month ) {
+					var monthName = this.monthList[e].text.split(" ");
+				}
+			}
+			return monthName[0] + ' ' + monthName[1];
 		}
 	}
 }

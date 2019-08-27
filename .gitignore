@@ -16,6 +16,7 @@ hup-uploader/uploads/
 # local env files
 .env.local
 .env.*.local
+.env.development
 .env
 
 # Log files
