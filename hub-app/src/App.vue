@@ -3,7 +3,7 @@
 		<header class="container-fluid">
 			<div class="row align-items-center">
 				<div class="col-md-12 col-lg-5">
-					<h3>Texas News Hub Newscasts</h3>
+					<h3>The Texas Newsroom Newscasts</h3>
 				</div>
 				<div class="col-md-12 col-lg-7">
 					<div class="row align-items-center">
