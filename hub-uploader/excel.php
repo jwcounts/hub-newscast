@@ -41,8 +41,8 @@
 					$headers['outlet'] = $k;
 				endif;
 			endforeach;
-		elseif ( preg_match( '/^[A-Z\-]{6,7}$/', trim( $d[ $headers['outlet'] ] ) ) ) :
-			$station = strtolower( $d[ $headers['outlet'] ] );
+		elseif ( preg_match( '/^[A-Z a-z\-]{6,10}$/', trim( $d[ $headers['outlet'] ] ) ) ) :
+			$station = str_replace( ' total', '-fm', strtolower( $d[ $headers['outlet'] ] ) );
 			if ( count( $data ) > 30 && preg_match( '/Mo\-Fr [0-9:\-AP]+/', $d[ $headers['time-period'] ] ) ) :
 				$date = explode( ' ', $d[ $headers['time-period'] ] );
 				$dp_start = explode( '-', $date[1] );

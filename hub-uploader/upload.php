@@ -9,6 +9,7 @@
 	$seed = '2019/01/01 ';
 	$days = $dates = $reportWeeks = $times_unix = [];
 	$ros = false;
+	$debug = false;
 	$times = [
 		'7:30A-7:45A',
 		'8:30A-8:45A',
@@ -100,10 +101,28 @@
 			$tempFile = $_FILES['acd']['tmp_name'];
 		endif;
 
-		if ( $_FILES['acd']['type'] == 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' || $_FILES['acd']['type'] == 'application/octet-stream' ) :
+		if (
+			$_FILES['acd']['type'] == 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' ||
+			$_FILES['acd']['type'] == 'application/octet-stream' ||
+			$_FILES['acd']['type'] == 'application/vnd.ms-excel' ) :
 			require __DIR__ . $ds . 'excel.php';
 		elseif ( $_FILES['acd']['type'] == 'text/csv' ) :
-			require __DIR__ . $ds . 'csv.php';
+			if ( !empty( $_POST && !empty( $_POST['stationCall'] ) ) ) :
+				$org_id = (int)$_POST['stationCall'];
+				if ( !empty( $orgs[ $org_id ] ) ) :
+					$station = $orgs[ $org_id ];
+					require __DIR__ . $ds . 'csv.php';
+				else :
+					header("HTTP/1.1 403 Forbidden");
+					echo 'Invalid NPR Org ID. Please upload your file again and enter a valid org ID when prompted.';
+					die;
+				endif;
+			else :
+				header("HTTP/1.1 403 Forbidden");
+				echo 'No NPR Org ID entered. Please upload your file again and enter your Org ID when prompted.';
+				die;
+			endif;
+
 		else :
 			header("HTTP/1.1 403 Forbidden");
 			echo '<p>Unsupported file type. Please try again with a supported type.</p>';

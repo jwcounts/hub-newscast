@@ -22,8 +22,8 @@
 		endforeach;
 	endforeach;
 
-	foreach ( $hours as $hh ) :
-		$digi_over_avg[ $hh['airtime'] ] = 0;
+	foreach ( $digital_hours as $hh ) :
+		$digi_over_avg[ $hh ] = 0;
 	endforeach;
 
 	$station_headers = [ 'Timeframe', 'AQH Persons', 'AQH Rating %', 'Share %', 'Average Weekly Cume' ];
@@ -38,7 +38,7 @@
 		],
 		'Digital Summary' => [
 			[ 'Digital Downloads', '', '', '', '', '', '', '', '' ],
-			[ 'Station', '7:31 AM', '8:31 AM', '10:30 AM', '1:04 PM', '4:32 PM', '5:32 PM', 'Station Total', 'Station Average' ]
+			[ 'Station', '12:30', '13:30', '18:00', '21:30', '22:30', 'Station Total', 'Station Average' ]
 		]
 	];
 
@@ -159,9 +159,9 @@
 	if ( !empty( $sheets['Digital Summary'][2] ) ) :
 		$digi_total_temp = [ 'Timeslot Totals' ];
 		$digi_avg_temp = [ 'Timeslot Averages' ];
-		foreach ( $hours as $hh ) :
-			$digi_total_temp[] = $digi_over_avg[ $hh['airtime'] ];
-			$digi_avg_temp[] = round( $digi_over_avg[ $hh['airtime'] ] / count( $temp ), 0 );
+		foreach ( $digital_hours as $hh ) :
+			$digi_total_temp[] = $digi_over_avg[ $hh ];
+			$digi_avg_temp[] = round( $digi_over_avg[ $hh ] / count( $temp ), 0 );
 		endforeach;
 		$digi_total_temp[] = array_sum( $digi_over_avg );
 		$digi_total_temp[] = '';
@@ -172,6 +172,9 @@
 	endif;
 
 	$rsheets = array_reverse( $sheets );
+	if ( $debug ) :
+		print_r( $rsheets );
+	endif;
 	foreach ( $rsheets as $k => $v ) :
 		$myWorkSheet = new \PhpOffice\PhpSpreadsheet\Worksheet\Worksheet( $spreadsheet, $k );
 		$spreadsheet->addSheet( $myWorkSheet, 0 );

@@ -17,7 +17,7 @@
 		$dotenv->required([ 'PASSWORD' ]);
 	endif;
 	$password = env( 'PASSWORD' );
-	
+
 	$store = 'uploads';
 	if ( !empty( $_POST['pin'] ) && $_POST['pin'] === $password ) :
 		$_SESSION['pin'] = $_POST['pin'];
@@ -114,6 +114,12 @@
 				acceptedFiles: ".xls,.xlsx,.csv",
 				maxFilesize: 20,
 				init: function() {
+					this.on("sending", function(file, xhr, formData) {
+						if (file.type === 'text/csv') {
+							var stationCall = prompt("Enter your NPR Org ID\nKERA: 77\nKUHF: 220\nKTSX: 188\nKUT: 252", "###");
+							formData.append( "stationCall", stationCall );
+						}
+					});
 					this.on("error", function(file, errorMessage) {
 						alert( errorMessage );
 					});
