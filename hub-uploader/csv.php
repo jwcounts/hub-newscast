@@ -1,59 +1,59 @@
 <?php
-	$digital_hours = [ '12:30','13:30','18:00','21:30','22:30' ];
+	$digital_hours = [ '12:30','13:30','14:30','18:00','19:00','21:30','22:30','23:30' ];
 
 	$row = 0;
-	$headers = $temp = [];
+	$headers = $temp = $datatemp = [];
 	if ( ( $handle = fopen( $tempFile, "r" ) ) !== FALSE ) :
 		while ( ( $data = fgetcsv( $handle, 1000, "," ) ) !== FALSE ) :
-			if ( $row === 0 ) :
-				foreach ( $data as $k => $v ) :
-					if ( trim( $v ) == 'PublishHour' ) :
-						$headers['publish'] = $k;
-					elseif ( trim( $v ) == 'StationUserListens' ) :
-						$headers['downloads'] = $k;
-					elseif ( trim( $v ) == 'AverageCompletion' ) :
-						$headers['avg-comp'] = $k;
-					endif;
-				endforeach;
-			else :
-				$temp_time = explode( ' ', $data[ $headers['publish'] ] );
-				$digi_time = [
-					'date' => explode( '-', $temp_time[0] ),
-					'time' => explode( ':', $temp_time[1] )
-				];
-				$digihour = $digi_time['time'][0] . ':' . $digi_time['time'][1];
-				if ( $row === 1 ) :
-					$report_date = $digi_time['date'][0] . '-' . $digi_time['date'][1];
-					$filepath = $data_path . $report_date . '.json';
-					if ( file_exists( $filepath ) ) :
-						$temp = json_decode( file_get_contents( $filepath ), true );
-					else :
-						$temp = [];
-					endif;
-
-					$month_txt = date( 'F', mktime( 0, 0, 0, $digi_time['date'][1], $digi_time['date'][2], $digi_time['date'][0] ) );
-
-					$excel_file = strtoupper( $month_txt ) . '_' . $digi_time['date'][0] . '-Newscast_Summary.xlsx';
-					$excel_file_path = $data_path . 'excel' . $ds . $excel_file;
-					if ( empty( $reportWeeks[ $report_date ] ) ) :
-						$reportWeeks[ $report_date ] = [
-							'text' => $month_txt . " " . $digi_time['date'][0],
-							'download' => $excel_file
-						];
-					endif;
-
-					$digi = [];
-					foreach ( $digital_hours as $dh ) :
-						$digi[ $dh ] = 0;
-					endforeach;
-					$temp[ $station ]['digital'] = $digi;
-				endif;
-
-				$temp[ $station ]['digital'][ $digihour ] += $data[ $headers['downloads'] ];
-			endif;
-			$row++;
+			$datatemp[] = $data;
 		endwhile;
 	endif;
+	fclose( $handle );
+
+	$headtemp = array_shift( $datatemp );
+	foreach ( $headtemp as $k => $v ) :
+		if ( trim( $v ) == 'PublishHour' ) :
+			$headers['publish'] = $k;
+		elseif ( trim( $v ) == 'StationUserListens' ) :
+			$headers['downloads'] = $k;
+		elseif ( trim( $v ) == 'AverageCompletion' ) :
+			$headers['avg-comp'] = $k;
+		endif;
+	endforeach;
+
+	$num = round( ( ( count( $datatemp ) - 1 ) / 2 ), PHP_ROUND_HALF_UP );
+	preg_match( '/^([0-9]{4})-([0-9]{2})-([0-9]{2}) ([0-9]{2}):([0-9]{2}):([0-9]{2})$/', $datatemp[ $num ][ $headers['publish'] ], $digi_time );
+
+	$report_date = $digi_time[1] . '-' . $digi_time[2];
+	$filepath = $data_path . $report_date . '.json';
+	if ( file_exists( $filepath ) ) :
+		$temp = json_decode( file_get_contents( $filepath ), true );
+	else :
+		$temp = [];
+	endif;
+
+	$month_txt = date( 'F', mktime( 0, 0, 0, $digi_time[2], $digi_time[3], $digi_time[1] ) );
+
+	$excel_file = strtoupper( $month_txt ) . '_' . $digi_time[1] . '-Newscast_Summary.xlsx';
+	$excel_file_path = $data_path . 'excel' . $ds . $excel_file;
+	if ( empty( $reportWeeks[ $report_date ] ) ) :
+		$reportWeeks[ $report_date ] = [
+			'text' => $month_txt . " " . $digi_time[1],
+			'download' => $excel_file
+		];
+	endif;
+
+	$digi = [];
+	foreach ( $digital_hours as $dh ) :
+		$digi[ $dh ] = 0;
+	endforeach;
+	$temp[ $station ]['digital'] = $digi;
+
+	foreach ( $datatemp as $dt ) :
+		preg_match( '/^([0-9]{4})-([0-9]{2})-([0-9]{2}) ([0-9]{2}):([0-9]{2}):([0-9]{2})$/', $dt[ $headers['publish'] ], $digi_time );
+		$digihour = $digi_time[4] . ':' . $digi_time[5];
+		$temp[ $station ]['digital'][ $digihour ] += $dt[ $headers['downloads'] ];
+	endforeach;
 	$digi_avg = 0;
 	foreach ( $temp[ $station ]['digital'] as $td ) :
 		$digi_avg += $td;
