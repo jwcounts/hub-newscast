@@ -86,9 +86,9 @@ export default {
 			output += '<tr>';
 			for (m=0; m<metrics.length; m++) {
 				if ( m == 0 ) {
-					output += '<th scope="row" class="text-center align-middle">All Stations<br />(Average)</th>';
+					output += '<th scope="row" class="text-center align-middle">All Stations</th>';
 				}
-				output += '<td class="text-center">'+numberWithCommas( ( Number( averages[metrics[m].text] )/outlets.length ).toFixed(0) )+'</td>';
+				output += '<td class="text-center">'+numberWithCommas( Number( averages[metrics[m].text] ).toFixed(0) )+'</td>';
 			}
 			output += '</tr>';
 			return output;

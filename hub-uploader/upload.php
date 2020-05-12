@@ -10,6 +10,7 @@
 	$days = $dates = $reportWeeks = $times_unix = [];
 	$ros = false;
 	$debug = false;
+	$filetype = '';
 	$times = [
 		'7:30A-7:45A',
 		'8:30A-8:45A',
@@ -102,11 +103,22 @@
 		endif;
 
 		if (
-			$_FILES['acd']['type'] == 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' ||
-			$_FILES['acd']['type'] == 'application/octet-stream' ||
-			$_FILES['acd']['type'] == 'application/vnd.ms-excel' ) :
+			$_FILES['acd']['type'] === 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' ||
+			$_FILES['acd']['type'] === 'application/octet-stream'
+		) :
+			$filetype = 'excel';
+		elseif ( $_FILES['acd']['type'] === 'text/csv' ) :
+			$filetype = 'csv';
+		elseif ( $_FILES['acd']['type'] == 'application/vnd.ms-excel' ) :
+			if ( preg_match( '/\.csv$/i', $filename ) ) :
+				$filetype = 'csv';
+			else :
+				$filetype = 'excel';
+			endif;
+		endif;
+		if ( $filetype === 'excel' ) :
 			require __DIR__ . $ds . 'excel.php';
-		elseif ( $_FILES['acd']['type'] == 'text/csv' ) :
+		elseif ( $filetype === 'csv' ) :
 			if ( !empty( $_POST && !empty( $_POST['stationCall'] ) ) ) :
 				$org_id = (int)$_POST['stationCall'];
 				if ( !empty( $orgs[ $org_id ] ) ) :
@@ -122,7 +134,6 @@
 				echo 'No NPR Org ID entered. Please upload your file again and enter your Org ID when prompted.';
 				die;
 			endif;
-
 		else :
 			header("HTTP/1.1 403 Forbidden");
 			echo '<p>Unsupported file type. Please try again with a supported type.</p>';

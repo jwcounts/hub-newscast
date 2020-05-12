@@ -27,7 +27,26 @@
 		<meta charset="utf-8">
 		<meta http-equiv="X-UA-Compatible" content="IE=edge">
 		<meta name="viewport" content="width=device-width, initial-scale=1">
-		<title>Texas News Hub Newscast Stats</title>
+		<link rel="icon" sizes="48x48" href="https://cdn.hpm.io/assets/images/favicon/icon-48.png">
+		<link rel="icon" sizes="96x96" href="https://cdn.hpm.io/assets/images/favicon/icon-96.png">
+		<link rel="icon" sizes="144x144" href="https://cdn.hpm.io/assets/images/favicon/icon-144.png">
+		<link rel="icon" sizes="192x192" href="https://cdn.hpm.io/assets/images/favicon/icon-192.png">
+		<link rel="icon" sizes="256x256" href="https://cdn.hpm.io/assets/images/favicon/icon-256.png">
+		<link rel="icon" sizes="384x384" href="https://cdn.hpm.io/assets/images/favicon/icon-384.png">
+		<link rel="icon" sizes="512x512" href="https://cdn.hpm.io/assets/images/favicon/icon-512.png">
+		<link rel="apple-touch-icon" sizes="57x57" href="https://cdn.hpm.io/assets/images/favicon/apple-touch-icon-57.png">
+		<link rel="apple-touch-icon" sizes="60x60" href="https://cdn.hpm.io/assets/images/favicon/apple-touch-icon-60.png">
+		<link rel="apple-touch-icon" sizes="72x72" href="https://cdn.hpm.io/assets/images/favicon/apple-touch-icon-72.png">
+		<link rel="apple-touch-icon" sizes="76x76" href="https://cdn.hpm.io/assets/images/favicon/apple-touch-icon-76.png">
+		<link rel="apple-touch-icon" sizes="114x114" href="https://cdn.hpm.io/assets/images/favicon/apple-touch-icon-114.png">
+		<link rel="apple-touch-icon" sizes="120x120" href="https://cdn.hpm.io/assets/images/favicon/apple-touch-icon-120.png">
+		<link rel="apple-touch-icon" sizes="152x152" href="https://cdn.hpm.io/assets/images/favicon/apple-touch-icon-152.png">
+		<link rel="apple-touch-icon" sizes="167x167" href="https://cdn.hpm.io/assets/images/favicon/apple-touch-icon-167.png">
+		<link rel="apple-touch-icon" sizes="180x180" href="https://cdn.hpm.io/assets/images/favicon/apple-touch-icon-180.png">
+		<link rel="mask-icon" href="https://cdn.hpm.io/assets/images/favicon/safari-pinned-tab.svg" color="#ff0000">
+		<meta name="msapplication-config" content="https://cdn.hpm.io/assets/images/favicon/config.xml" />
+		<link rel="manifest" href="https://cdn.hpm.io/assets/images/favicon/manifest.json">
+		<title>Texas Newsroom Newscast Stats</title>
 		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
 		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
 		<link href="https://app.hpm.io/js/dropzone/css/dropzone.css" rel="stylesheet" />
@@ -62,7 +81,7 @@
 	</head>
 	<body>
 		<header>
-			<h3>Texas News Hub Newscast Stats</h3>
+			<h3>Texas Newsroom Newscast Stats</h3>
 		</header>
 		<div class="container-fluid">
 <?PHP
@@ -103,7 +122,7 @@
 		</div>
 		<footer class="clearfix">
 			<p class="pull-left">&copy; <?PHP echo date('Y'); ?>, Houston Public Media</p>
-			<p class="pull-right"><a href="/hub/" class="btn btn-success">Graphing App</a></p>
+			<p class="pull-right"><a href="/hub/upload/help/" class="btn btn-danger">Need Help?</a> <a href="/hub/" class="btn btn-success">Graphing App</a></p>
 		</footer>
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
 		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
@@ -115,7 +134,11 @@
 				maxFilesize: 20,
 				init: function() {
 					this.on("sending", function(file, xhr, formData) {
-						if (file.type === 'text/csv') {
+						var csv = false;
+						if (file.type === 'text/csv' || file.name.match('\.csv$') ) {
+							csv = true;
+						}
+						if (csv) {
 							var stationCall = prompt("Enter your NPR Org ID\nKERA: 77\nKUHF: 220\nKTSX: 188\nKUT: 252", "###");
 							formData.append( "stationCall", stationCall );
 						}

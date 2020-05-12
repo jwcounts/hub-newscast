@@ -34,7 +34,7 @@
 						<Ros :chart-data="chartData"></Ros>
 					</template>
 					<template v-else-if="item.text == 'digital' ">
-						<h2>{{ item.title }}: {{ monthName(monthSelected) }}</h2>
+						<h2>{{ item.title }}: {{ monthName(monthSelected) }} (Calendar Month)</h2>
 						<Digital :chart-data="chartData"></Digital>
 					</template>
 					<template v-else>
