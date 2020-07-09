@@ -37,8 +37,8 @@
 			[ 'Station', 'Metric', '7:30A-7:45A', '8:30A-8:45A', '10:30A-10:45A', '1P-1:15P', '4:30P-4:45P', '5:30P-5:45P',   'Averages' ]
 		],
 		'Digital Summary' => [
-			[ 'Digital Downloads', '', '', '', '', '', '', '', '' ],
-			[ 'Station', '12:30', '13:30', '18:00', '21:30', '22:30', 'Station Total', 'Station Average' ]
+			[ 'Digital Downloads', '', '', '', '', '', '', '', '', '', '' ],
+			[ 'Station', '12:30', '13:30', '14:30', '18:00', '19:00', '21:30', '22:30', '23:30', 'Station Total', 'Station Average' ]
 		]
 	];
 
@@ -165,8 +165,8 @@
 		endforeach;
 		$digi_total_temp[] = array_sum( $digi_over_avg );
 		$digi_total_temp[] = '';
-		$digi_avg_temp[] = round( array_sum( $digi_over_avg) / count( $digi_over_avg ), 0 );
 		$digi_avg_temp[] = '';
+		$digi_avg_temp[] = round( array_sum( $digi_over_avg ) / count( $digi_over_avg ), 0 );
 		$sheets['Digital Summary'][] = $digi_total_temp;
 		$sheets['Digital Summary'][] = $digi_avg_temp;
 	endif;

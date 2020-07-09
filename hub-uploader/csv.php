@@ -59,4 +59,4 @@
 		$digi_avg += $td;
 	endforeach;
 	$temp[ $station ]['digital']['Total'] = $digi_avg;
-	$temp[ $station ]['digital']['Average'] = round( $digi_avg / count( $temp[ $station ]['digital'] ), 0 );
+	$temp[ $station ]['digital']['Average'] = round( $digi_avg / count( $digital_hours ), 0 );
