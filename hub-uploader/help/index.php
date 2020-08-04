@@ -24,56 +24,58 @@
 		<meta name="msapplication-config" content="https://cdn.hpm.io/assets/images/favicon/config.xml" />
 		<link rel="manifest" href="https://cdn.hpm.io/assets/images/favicon/manifest.json">
 		<title>Texas Newsroom Data Uploader Instructions</title>
-		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
-		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.0/css/bulma.min.css">
 		<style>
-			html { height: 100%; }
-			body { position: relative; padding-bottom: 50px; min-height: 100%; }
-			header, footer { padding: 0 15px; background: rgb(25,25,25); }
-			footer { position: absolute; bottom: 0; left: 0; width: 100%; }
-			header h3, footer p { color: white; margin: 0; padding: 10px 0; }
-			header h3 span { font-size: 12px; font-style: italic; }
-			ul { padding-bottom: 20px; }
-			ul li, ol li {
-				margin-bottom: 15px;
-				font-size: 16px;
-				font-weight: 400;
+			ol, ul {
+				list-style-position: outside;
+				margin: 1em;
+				padding: 1em;
 			}
-			ul li img, ol li img {
-				max-width: 100%;
+			ol li, ul li {
+				margin-bottom: 1em;
 			}
-			th, td { text-align: center; }
-			.jumbotron { background-color: white !important; }
-			.jumbotron h1 span { font-size: 33px; }
-			td span { font-size: 10px; }
-			.bg-info, .bg-success, .bg-warning { margin-bottom: 20px; border-bottom: 4px solid #000; padding-bottom: 20px; }
-			@media print {
-				header, footer, #inputforms, #print, #stats { display: none; }
-				h2 { font-size: 24px; }
-				h3 { font-size: 18px; }
-				h4 { font-size: 12px; }
-				h1, .h1, h2, .h2, h3, .h3 {
-					margin-top: 10px;
-					margin-bottom: 5px;
-				}
-				.bg-info, .bg-success, .bg-warning { margin-bottom: 0; }
+			.column {
+				padding: 1.5em;
+			}
+			ol ol {
+				list-style-type: upper-alpha;
 			}
 		</style>
 	</head>
 	<body>
-		<header>
-			<h3>Texas Newsroom Data Uploader Instructions</h3>
-		</header>
-		<div class="container-fluid">
-			<div class="row jumbotron">
-				<div class="col-sm-8 col-sm-offset-2">
-					<h1>Texas News Hub Newcast Analytics</h1>
-					<h2>Overview</h2>
-					<p>This application was built to help visualize and aggregate newscast analytics for the stations in the Texas Newsroom project. It is broken into 2 parts: a PHP-based parser that can receive reports from the PPM Analysis Tool and NPR One, and a Vue.js/Chart.js-powered visualization application. Below are walkthroughs on how to download data from the respective tools.</p>
+		<nav class="navbar is-dark" role="navigation" aria-label="main navigation">
+			<div class="navbar-brand">
+				<a class="navbar-item" href="https://analytics.hpm.io/hub/">
+					Texas Newsroom Data Uploader Help
+				</a>
+			</div>
+			<div class="navbar-end">
+				<div class="navbar-item">
+					<div class="buttons">
+						<a class="button is-primary" href="/hub/upload/">
+							Data Uploader
+						</a>
+						<a class="button is-link" href="/hub/">
+							Graphing App
+						</a>
+					</div>
 				</div>
-				<div class="row">
-					<div class="col-sm-5">
-						<h2>PPM Reports</h2>
+			</div>
+		</nav>
+		<div class="container is-fluid">
+			<div class="hero">
+				<div class="columns is-centered hero-body">
+					<div class="column is-two-thirds">
+						<h1 class="is-size-1">Texas News Hub Newcast Analytics</h1>
+						<h2 class="is-size-2">Overview</h2>
+						<p>This application was built to help visualize and aggregate newscast analytics for the stations in the Texas Newsroom project. It is broken into 2 parts: a PHP-based parser that can receive reports from the PPM Analysis Tool and NPR One, and a Vue.js/Chart.js-powered visualization application. Below are walkthroughs on how to download data from the respective tools.</p>
+					</div>
+				</div>
+			</div>
+			<section class="section">
+				<div class="columns is-centered is-multiline">
+					<div class="column is-6">
+						<h2 class="is-size-2">PPM Reports</h2>
 						<ol>
 							<li>Open PPM Analysis Tool. As it is only available for Windows machines, macOS users will either have to find a separate machine or set up a virtual machine. If you go the virtual machine route, <a href="https://developer.microsoft.com/en-us/microsoft-edge/tools/vms/" rel="nofollow">Microsoft offers some basic VMs that you can download and use for free</a> for the various virtualization platforms. <a href="https://www.virtualbox.org/wiki/Downloads" rel="nofollow">VirtualBox is available for free also.</a></li>
 							<li>Open the Ranker section and click "Radio." Here is a screenshot of our report setup. If you can match this without any other help, <a href="#step-3">you can skip to step 3</a>.<br><img src="https://github.com/jwcounts/hub-newscast/raw/master/screenshots/screen-01.png" alt="Selecting Radio Ranker report in PPM Analysis Tool" width="500" style="max-width:100%;"><br><img alt="Screenshot of PPM Analysis Tool Ranker report setup" src="https://github.com/jwcounts/hub-newscast/raw/master/screenshots/screen-02.png" width="500" style="max-width:100%;">
@@ -94,8 +96,8 @@
 							<li>Drag-and-drop your file into the dropzone, or click in the dropzone to bring up a file picker. You can upload multiple files at a time, as long as the files contain one month's data for one station.<br><img src="https://github.com/jwcounts/hub-newscast/raw/master/screenshots/screen-11.png" alt="The upload screen" width="500" style="max-width:100%;"></li>
 						</ol>
 					</div>
-					<div class="col-md-5 col-md-offset-2">
-						<h2>NPR One Reports</h2>
+					<div class="column is-6">
+						<h2 class="is-size-2">NPR One Reports</h2>
 						<ol>
 							<li>Each station logs in to <a href="https://analytics.nprstations.org/">NPR Station Analytics</a> to get its own metrics.<br /><br />If you don’t have an account for <a href="https://analytics.nprstations.org/">NPR Station Analytics</a> you can register to do so. Each account has access to only one station.</li>
 							<li>Go to the <code>NPR One</code> tab and change the dates to include the month you want to view. Click <code>Submit</code>.<br /><img src="./img/image001.png" alt="Go to the NPR One tab and change the dates to include the month you want to view. Click Submit."></li>
@@ -105,18 +107,12 @@
 							<li>Go to the Texas News Hub dashboard upload page at <a href="https://analytics.hpm.io/hub/upload/">Texas Newsroom Data Uploader page</a> and upload this file.</li>
 						</ol>
 					</div>
+					<div class="column is-4">
+						<h2 class="is-size-2">Questions</h2>
+						<p>Contact me at <a href="mailto:jcounts@houstonpublicmedia.org">jcounts@houstonpublicmedia.org</a>.</p>
+					</div>
 				</div>
-				<div class="col-sm-6 col-sm-offset-3">
-					<h2 class="text-center">Questions</h2>
-					<p class="text-center">Contact me at <a href="mailto:jcounts@houstonpublicmedia.org">jcounts@houstonpublicmedia.org</a>.</p>
-				</div>
-			</div>
+			</section>
 		</div>
-		<footer class="clearfix">
-			<p class="pull-left">&copy; <?PHP echo date('Y'); ?>, Houston Public Media</p>
-			<p class="pull-right"><a href="/hub/upload/" class="btn btn-primary">Data Uploader</a> <a href="/hub/" class="btn btn-success">Graphing App</a></p>
-		</footer>
-		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
-		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
 	</body>
 </html>

@@ -49,30 +49,6 @@
 		<title>Texas Newsroom Newscast Stats</title>
 		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.0/css/bulma.min.css">
 		<link href="https://app.hpm.io/js/dropzone/css/dropzone.css" rel="stylesheet" />
-		<style>
-			html { height: 100%; }
-			body { position: relative; padding-bottom: 50px; min-height: 100%; }
-			header, footer { padding: 0 15px; background: rgb(25,25,25); }
-			footer { position: absolute; bottom: 0; left: 0; width: 100%; }
-			header h3, footer p { color: white; margin: 0; padding: 10px 0; }
-			header h3 span { font-size: 12px; font-style: italic; }
-			ul { padding-bottom: 20px; }
-			th, td { text-align: center; }
-			.jumbotron h1 span { font-size: 33px; }
-			td span { font-size: 10px; }
-			.bg-info, .bg-success, .bg-warning { margin-bottom: 20px; border-bottom: 4px solid #000; padding-bottom: 20px; }
-			@media print {
-				header, footer, #inputforms, #print, #stats { display: none; }
-				h2 { font-size: 24px; }
-				h3 { font-size: 18px; }
-				h4 { font-size: 12px; }
-				h1, .h1, h2, .h2, h3, .h3 {
-					margin-top: 10px;
-					margin-bottom: 5px;
-				}
-				.bg-info, .bg-success, .bg-warning { margin-bottom: 0; }
-			}
-		</style>
 	</head>
 	<body>
 		<nav class="navbar is-dark" role="navigation" aria-label="main navigation">
