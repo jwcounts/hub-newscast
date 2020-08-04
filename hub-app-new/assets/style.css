@@ -1,0 +1,105 @@
+.tabs li {
+	margin: 0 0.5em;
+}
+.tabs li:hover {
+	opacity: 0.75;
+	cursor: pointer;
+}
+.tabs li.kuhf-fm {
+	background-color: rgba(219,68,55,0.2);
+}
+.tabs li.kera-fm {
+	background-color: rgba(59,89,152,0.2);
+}
+.tabs li.kut-fm {
+	background-color: rgba(138,58,185,0.2);
+}
+.tabs li.kstx-fm {
+	background-color: rgba(5,106,178,0.2);
+}
+.tabs li.overall {
+	background-color: rgba(128,128,128,0.2);
+}
+.tabs li.ros {
+	background-color: rgba(15,185,24,0.2);
+}
+.tabs li.digital {
+	background-color: rgba(230,131,2,0.2);
+}
+.tabs li a {
+	font-weight: bolder;
+}
+.tabs li.is-active a {
+	color: white !important;
+}
+.tabs li.is-active.kuhf-fm {
+	background-color: rgba(219,68,55,0.75);
+}
+.tabs li.is-active.kera-fm {
+	background-color: rgba(59,89,152,0.75);
+}
+.tabs li.is-active.kut-fm {
+	background-color: rgba(138,58,185,0.75);
+}
+.tabs li.is-active.kstx-fm {
+	background-color: rgba(5,106,178,0.75);
+}
+.tabs li.is-active.overall {
+	background-color: rgba(128,128,128,0.75);
+}
+.tabs li.is-active.ros {
+	background-color: rgba(15,185,24,0.75);
+}
+.tabs li.is-active.digital {
+	background-color: rgba(230,131,2,0.75);
+}
+.tabs li.inactive {
+	display: none;
+}
+#app {
+	-webkit-overflow-scrolling: touch;
+	overflow: hidden;
+	overflow-x: auto;
+}
+#app .services {
+	width: 100%;
+	min-width: 800px;
+	display: none;
+	margin-bottom: 2em;
+}
+#app #overall-service.services {
+	min-width: auto;
+}
+#app .services.service-active {
+	display: block;
+}
+#app .services.service-inactive {
+	display: none;
+}
+nav.navbar {
+	border-bottom: 1px solid #808080;
+}
+canvas {
+	-moz-user-select: none;
+	-webkit-user-select: none;
+	-ms-user-select: none;
+	margin-bottom: 1em;
+	max-width: 100% !important;
+}
+table td.text-center {
+	text-align: center;
+}
+table th.align-middle {
+	vertical-align: middle;
+}
+.table.is-striped tbody tr:not(.is-selected):nth-child(even) {
+	background-color: #ececec !important;
+}
+@media screen and (min-width: 1024px) {
+	#app {
+		overflow: hidden;
+	}
+	#app .services {
+		min-width: auto;
+	}
+}

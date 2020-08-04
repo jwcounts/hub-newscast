@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width,initial-scale=1">
+		<title>Texas Newsroom Newscast Analytics</title>
+		<link rel="icon" sizes="48x48" href="https://cdn.hpm.io/assets/images/favicon/icon-48.png">
+		<link rel="icon" sizes="96x96" href="https://cdn.hpm.io/assets/images/favicon/icon-96.png">
+		<link rel="icon" sizes="144x144" href="https://cdn.hpm.io/assets/images/favicon/icon-144.png">
+		<link rel="icon" sizes="192x192" href="https://cdn.hpm.io/assets/images/favicon/icon-192.png">
+		<link rel="icon" sizes="256x256" href="https://cdn.hpm.io/assets/images/favicon/icon-256.png">
+		<link rel="icon" sizes="384x384" href="https://cdn.hpm.io/assets/images/favicon/icon-384.png">
+		<link rel="icon" sizes="512x512" href="https://cdn.hpm.io/assets/images/favicon/icon-512.png">
+		<link rel="apple-touch-icon" sizes="57x57" href="https://cdn.hpm.io/assets/images/favicon/apple-touch-icon-57.png">
+		<link rel="apple-touch-icon" sizes="60x60" href="https://cdn.hpm.io/assets/images/favicon/apple-touch-icon-60.png">
+		<link rel="apple-touch-icon" sizes="72x72" href="https://cdn.hpm.io/assets/images/favicon/apple-touch-icon-72.png">
+		<link rel="apple-touch-icon" sizes="76x76" href="https://cdn.hpm.io/assets/images/favicon/apple-touch-icon-76.png">
+		<link rel="apple-touch-icon" sizes="114x114" href="https://cdn.hpm.io/assets/images/favicon/apple-touch-icon-114.png">
+		<link rel="apple-touch-icon" sizes="120x120" href="https://cdn.hpm.io/assets/images/favicon/apple-touch-icon-120.png">
+		<link rel="apple-touch-icon" sizes="152x152" href="https://cdn.hpm.io/assets/images/favicon/apple-touch-icon-152.png">
+		<link rel="apple-touch-icon" sizes="167x167" href="https://cdn.hpm.io/assets/images/favicon/apple-touch-icon-167.png">
+		<link rel="apple-touch-icon" sizes="180x180" href="https://cdn.hpm.io/assets/images/favicon/apple-touch-icon-180.png">
+		<link rel="mask-icon" href="https://cdn.hpm.io/assets/images/favicon/safari-pinned-tab.svg" color="#ff0000">
+		<meta name="msapplication-config" content="https://cdn.hpm.io/assets/images/favicon/config.xml" />
+		<link rel="manifest" href="https://cdn.hpm.io/assets/images/favicon/manifest.json">
+		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.0/css/bulma.min.css">
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.bundle.min.js" integrity="sha256-TQq84xX6vkwR0Qs1qH5ADkP+MvH0W+9E7TdHJsoIQiM=" crossorigin="anonymous"></script>
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.min.css" integrity="sha256-aa0xaJgmK/X74WM224KMQeNQC2xYKwlAt08oZqjeF0E=" crossorigin="anonymous" />
+		<link rel="stylesheet" href="assets/style.css">
+	</head>
+	<body>
+		<nav class="navbar is-dark" role="navigation" aria-label="main navigation">
+			<div class="navbar-brand">
+				<a class="navbar-item" href="https://analytics.hpm.io/hub/">
+					Texas Newsroom Newscast Analytics
+				</a>
+			</div>
+			<div class="navbar-end">
+				<div class="navbar-item">
+					<div class="buttons">
+						<a class="button is-primary" href="" id="excelDownload">
+							<strong>Download Current</strong>
+						</a>
+						<a class="button is-link" href="/hub/upload/">
+							Data Upload
+						</a>
+					</div>
+				</div>
+				<div class="navbar-item">
+					<div class="select">
+						<select id="weekSelect"></select>
+					</div>
+				</div>
+			</div>
+		</nav>
+		<div class="tabs is-centered">
+			<ul>
+				<li id="ros" class="ros"><a>Broadcast Overview</a></li>
+				<li id="overall" class="overall is-active"><a>Newscasts Summary</a></li>
+				<li id="kera-fm" class="kera-fm"><a>KERA-FM Newscasts</a></li>
+				<li id="kstx-fm" class="kstx-fm"><a>KSTX-FM Newscasts</a></li>
+				<li id="kuhf-fm" class="kuhf-fm"><a>KUHF-FM Newscasts</a></li>
+				<li id="kut-fm" class="kut-fm"><a>KUT-FM Newscasts</a></li>
+				<li id="digital" class="digital"><a>Newscast Downloads</a></li>
+			</ul>
+		</div>
+		<div class="container is-fluid" id="app">
+			<div id="ros-service" class="services">
+				<h2 class="is-size-3">Broadcast Overview</h2>
+				<div id="ros-totals"></div>
+			</div>
+			<div id="overall-service" class="services service-active">
+				<h2 class="is-size-3">Newscasts Summary</h2>
+				<div id="overall-totals"></div>
+			</div>
+			<div id="kera-fm-service" class="services service-inactive">
+				<h2 class="is-size-3">KERA-FM Newscasts</h2>
+				<div class="columns is-centered is-multiline">
+					<div id="kera-fm-aqh-persons" class="column is-three-quarters"></div>
+					<div id="kera-fm-aqh-rtg" class="column is-three-quarters"></div>
+					<div id="kera-fm-share" class="column is-three-quarters"></div>
+					<div id="kera-fm-avg-wk-cume" class="column is-three-quarters"></div>
+				</div>
+			</div>
+			<div id="kstx-fm-service" class="services service-inactive">
+				<h2 class="is-size-3">KSTX-FM Newscasts</h2>
+				<div class="columns is-centered is-multiline">
+					<div id="kstx-fm-aqh-persons" class="column is-three-quarters"></div>
+					<div id="kstx-fm-aqh-rtg" class="column is-three-quarters"></div>
+					<div id="kstx-fm-share" class="column is-three-quarters"></div>
+					<div id="kstx-fm-avg-wk-cume" class="column is-three-quarters"></div>
+				</div>
+			</div>
+			<div id="kuhf-fm-service" class="services service-inactive">
+				<h2 class="is-size-3">KUHF-FM Newscasts</h2>
+				<div class="columns is-centered is-multiline">
+					<div id="kuhf-fm-aqh-persons" class="column is-three-quarters"></div>
+					<div id="kuhf-fm-aqh-rtg" class="column is-three-quarters"></div>
+					<div id="kuhf-fm-share" class="column is-three-quarters"></div>
+					<div id="kuhf-fm-avg-wk-cume" class="column is-three-quarters"></div>
+				</div>
+			</div>
+			<div id="kut-fm-service" class="services service-inactive">
+				<h2 class="is-size-3">KUT-FM Newscasts</h2>
+				<div class="columns is-centered is-multiline">
+					<div id="kut-fm-aqh-persons" class="column is-three-quarters"></div>
+					<div id="kut-fm-aqh-rtg" class="column is-three-quarters"></div>
+					<div id="kut-fm-share" class="column is-three-quarters"></div>
+					<div id="kut-fm-avg-wk-cume" class="column is-three-quarters"></div>
+				</div>
+			</div>
+			<div id="digital-service" class="services service-inactive">
+				<h2 class="is-size-3">Newscast Downloads: <span id="digital-time"></span> (Calendar Month)</h2>
+				<div id="digital-totals" style="margin-bottom: 2em;"></div>
+				<div class="columns is-centered is-multiline">
+					<div id="digital-downloads" class="column is-two-thirds"></div>
+				</div>
+			</div>
+		</div>
+		<script src="assets/main.js"></script>
+	</body>
+</html>

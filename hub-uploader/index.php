@@ -47,8 +47,7 @@
 		<meta name="msapplication-config" content="https://cdn.hpm.io/assets/images/favicon/config.xml" />
 		<link rel="manifest" href="https://cdn.hpm.io/assets/images/favicon/manifest.json">
 		<title>Texas Newsroom Newscast Stats</title>
-		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
-		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.0/css/bulma.min.css">
 		<link href="https://app.hpm.io/js/dropzone/css/dropzone.css" rel="stylesheet" />
 		<style>
 			html { height: 100%; }
@@ -74,58 +73,66 @@
 				.bg-info, .bg-success, .bg-warning { margin-bottom: 0; }
 			}
 		</style>
-		<!--[if lt IE 9]>
-		<script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
-		<script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
-		<![endif]-->
 	</head>
 	<body>
-		<header>
-			<h3>Texas Newsroom Newscast Stats</h3>
-		</header>
-		<div class="container-fluid">
-<?PHP
-	if ( !empty( $_SESSION['pin'] ) && $_SESSION['pin'] === $password ) : ?>
-			<div id="inputforms">
-				<div class="row jumbotron">
-					<div class="col-sm-12">
-						<h4>Upload Your Files</h4>
-						<form action="upload.php" class="dropzone" id="acd"></form>
-						<p><i>Accepted File Types: .xls, .xlsx, .csv</i></p>
+		<nav class="navbar is-dark" role="navigation" aria-label="main navigation">
+			<div class="navbar-brand">
+				<a class="navbar-item" href="https://analytics.hpm.io/hub/">
+					Texas Newsroom Newscast Stats
+				</a>
+			</div>
+			<div class="navbar-end">
+				<div class="navbar-item">
+					<div class="buttons">
+						<a class="button is-danger" href="/hub/upload/help/">
+							<strong>Need Help?</strong>
+						</a>
+						<a class="button is-link" href="/hub/">
+							Graphing App
+						</a>
 					</div>
 				</div>
 			</div>
-			<div class="row">
-				<div class="col-sm-12">
-					<div id="output"></div>
+		</nav>
+		<div class="container is-fluid">
+			<section class="section">
+<?PHP
+	if ( !empty( $_SESSION['pin'] ) && $_SESSION['pin'] === $password ) : ?>
+				<div id="inputforms">
+					<div class="columns is-centered">
+						<div class="column is-half">
+							<h4>Upload Your Files</h4>
+							<form action="upload.php" class="dropzone" id="acd"></form>
+							<p><i>Accepted File Types: .xls, .xlsx, .csv</i></p>
+						</div>
+					</div>
 				</div>
-			</div>
+				<div class="columns">
+					<div class="column">
+						<div id="output"></div>
+					</div>
+				</div>
 <?PHP
 	else : ?>
-			<div class="row jumbotron">
-					<div class="col-sm-6 col-sm-offset-3">
+				<div class="columns is-centered">
+					<div class="column is-half">
 						<form id="pinit" role="form" class="form-horizontal" method="post" action="">
-							<div class="form-group">
-								<label for="name" class="col-sm-4 control-label">Password?</label>
-								<div class="col-sm-8">
-									<input type="password" class="form-control" id="pin" placeholder="What's the secret word?" name="pin" />
+							<div class="field">
+								<label for="name" class="label">Password?</label>
+								<div class="control">
+									<input class="input" type="password" id="pin" placeholder="What's the secret word?" name="pin" />
 								</div>
 							</div>
-							<div class="form-group">
-								<button type="submit" class="btn btn-primary col-sm-2 col-sm-offset-5">Submit</button>
+							<div class="control">
+								<button type="submit" class="button is-primary">Submit</button>
 							</div>
 						</form>
 					</div>
 				</div>
 <?PHP
 	endif; ?>
+			</section>
 		</div>
-		<footer class="clearfix">
-			<p class="pull-left">&copy; <?PHP echo date('Y'); ?>, Houston Public Media</p>
-			<p class="pull-right"><a href="/hub/upload/help/" class="btn btn-danger">Need Help?</a> <a href="/hub/" class="btn btn-success">Graphing App</a></p>
-		</footer>
-		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
-		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
 		<script src="https://app.hpm.io/js/dropzone/dropzone.min.js"></script>
 		<script>
 			Dropzone.options.acd = {
@@ -147,7 +154,8 @@
 						alert( errorMessage );
 					});
 					this.on("success", function(file, responseText) {
-						$("#output").append(responseText.message);
+						console.log(responseText);
+						document.querySelector("#output").append(responseText.message);
 					});
 				}
 			};

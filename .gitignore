@@ -7,7 +7,9 @@ composer.lock
 hub-uploader/data/*
 !hub-uploader/data/.gitkeep
 !hub-uploader/data/excel/.gitkeep
-hup-uploader/uploads/
+hub-uploader/uploads/
+hub-app-new/data/*
+!hub-app-new/data/.gitkeep
 *.xls
 *.xlsx
 *.csv
