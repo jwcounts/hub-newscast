@@ -131,7 +131,7 @@
 					});
 					this.on("success", function(file, responseText) {
 						console.log(responseText);
-						document.querySelector("#output").append(responseText.message);
+						document.querySelector("#output").innerHTML += responseText.message;
 					});
 				}
 			};

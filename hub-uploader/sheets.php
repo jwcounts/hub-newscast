@@ -21,10 +21,11 @@
 			$nc_avg[ $tt ][ $mt['slug'] ] = [];
 		endforeach;
 	endforeach;
-
-	foreach ( $digital_hours as $hh ) :
-		$digi_over_avg[ $hh ] = 0;
-	endforeach;
+	if ( !empty( $digital_hours ) ):
+		foreach ( $digital_hours as $hh ) :
+			$digi_over_avg[ $hh ] = 0;
+		endforeach;
+	endif;
 
 	$station_headers = [ 'Timeframe', 'AQH Persons', 'AQH Rating %', 'Share %', 'Average Weekly Cume' ];
 	$sheets = [

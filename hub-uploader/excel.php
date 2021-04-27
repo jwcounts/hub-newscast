@@ -10,8 +10,8 @@
 
 			$start_date = substr( $match[3], 0, 2 ) . '/' . substr( $match[3], 2, 2 ) . '/' . substr( $match[3], 4, 4 );
 			$end_date = substr( $match[4], 0, 2 ) . '/' . substr( $match[4], 2, 2 ) . '/' . substr( $match[4], 4, 4 );
-
-			$report_date = date( 'Y-m', $end );
+			$mid = $end - (($end - $start)/2);
+			$report_date = date( 'Y-m', $mid );
 			$filepath = $data_path . $report_date . '.json';
 			if ( file_exists( $filepath ) ) :
 				$temp = json_decode( file_get_contents( $filepath ), true );
@@ -41,7 +41,7 @@
 					$headers['outlet'] = $k;
 				endif;
 			endforeach;
-		elseif ( preg_match( '/^[A-Z a-z\-]{6,10}$/', trim( $d[ $headers['outlet'] ] ) ) ) :
+		elseif ( !empty( $d[ $headers['outlet'] ] ) && !empty( $headers['outlet'] ) && preg_match( '/^[A-Z a-z\-]{6,10}$/', trim( $d[ $headers['outlet'] ] ) ) ) :
 			$station = str_replace( ' total', '-fm', strtolower( $d[ $headers['outlet'] ] ) );
 			if ( count( $data ) > 30 && preg_match( '/Mo\-Fr [0-9:\-AP]+/', $d[ $headers['time-period'] ] ) ) :
 				$date = explode( ' ', $d[ $headers['time-period'] ] );
