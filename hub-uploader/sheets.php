@@ -80,10 +80,14 @@
 				endif;
 				$met_temp[] = $metrics[$i]['name'];
 				foreach ( $times as $tt ) :
-					$met_temp[] = $kv[$tt]['during'][ $metrics[$i]['slug'] ];
-					$nc_avg[ $tt ][ $metrics[$i]['slug'] ][] = $kv[$tt]['during'][ $metrics[$i]['slug'] ];
+					if ( !empty( $kv[ $tt ] ) ) :
+						$met_temp[] = $kv[$tt]['during'][ $metrics[$i]['slug'] ];
+						$nc_avg[ $tt ][ $metrics[$i]['slug'] ][] = $kv[$tt]['during'][ $metrics[$i]['slug'] ];
+					endif;
 				endforeach;
-				$met_temp[] = $kv['Averages'][ $metrics[$i]['slug'] ];
+				if ( !empty( $kv['Averages'] ) ) :
+					$met_temp[] = $kv['Averages'][ $metrics[$i]['slug'] ];
+				endif;
 				$sheets['Newscasts Summary'][] = $met_temp;
 			endfor;
 
@@ -105,9 +109,11 @@
 				$during_temp[] = $during;
 				$after_temp[] = $after;
 				for ( $i = 0; $i < count( $metrics ); $i ++ ) :
-					$before_temp[] = $kv[$tt]['before'][ $metrics[$i]['slug'] ];
-					$during_temp[] = $kv[$tt]['during'][ $metrics[$i]['slug'] ];
-					$after_temp[] = $kv[$tt]['after'][ $metrics[$i]['slug'] ];
+					if ( !empty( $kv[ $tt ] ) ) :
+						$before_temp[] = $kv[$tt]['before'][ $metrics[$i]['slug'] ];
+						$during_temp[] = $kv[$tt]['during'][ $metrics[$i]['slug'] ];
+						$after_temp[] = $kv[$tt]['after'][ $metrics[$i]['slug'] ];
+					endif;
 				endfor;
 				$sheets[ $sheet_name ][] = $before_temp;
 				$sheets[ $sheet_name ][] = $during_temp;

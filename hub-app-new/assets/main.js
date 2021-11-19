@@ -1,4 +1,5 @@
 const dlUrl = '/hub/data/';
+//const dlUrl = '/hub/app/data/';
 const tabs = document.querySelectorAll('.tabs ul li');
 const timeFrames = [ '7:30A-7:45A', '8:30A-8:45A', '10:30A-10:45A', '1P-1:15P', '4:30P-4:45P', '5:30P-5:45P' ];
 const digitalTimes = [ '12:30', '13:30', '14:30', '18:00', '19:00', '21:30', '22:30', '23:30' ];

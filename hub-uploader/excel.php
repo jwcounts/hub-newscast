@@ -1,4 +1,19 @@
 <?php
+	$months = [
+		'JANUARY' => '01',
+		'FEBRUARY' => '02',
+		'MARCH' => '03',
+		'APRIL' => '04',
+		'MAY' => '05',
+		'JUNE' => '06',
+		'JULY' => '07',
+		'AUGUST' => '08',
+		'SEPTEMBER' => '09',
+		'OCTOBER' => '10',
+		'NOVEMBER' => '11',
+		'DECEMBER' => '12',
+		'HOLIDAY' => '13'
+	];
 	$spreadsheet = \PhpOffice\PhpSpreadsheet\IOFactory::load( $tempFile );
 	$data = $spreadsheet->getActiveSheet()->toArray( null, true, true, true );
 	$headers = $avg_aqh = $avg_aqh_rtg = $avg_share = $avg_wk_cume = [];
@@ -10,8 +25,7 @@
 
 			$start_date = substr( $match[3], 0, 2 ) . '/' . substr( $match[3], 2, 2 ) . '/' . substr( $match[3], 4, 4 );
 			$end_date = substr( $match[4], 0, 2 ) . '/' . substr( $match[4], 2, 2 ) . '/' . substr( $match[4], 4, 4 );
-			$mid = $end - (($end - $start)/2);
-			$report_date = date( 'Y-m', $mid );
+			$report_date = $match[2] . '-' . $months[ $match[1] ];
 			$filepath = $data_path . $report_date . '.json';
 			if ( file_exists( $filepath ) ) :
 				$temp = json_decode( file_get_contents( $filepath ), true );
@@ -41,7 +55,7 @@
 					$headers['outlet'] = $k;
 				endif;
 			endforeach;
-		elseif ( !empty( $d[ $headers['outlet'] ] ) && !empty( $headers['outlet'] ) && preg_match( '/^[A-Z a-z\-]{6,10}$/', trim( $d[ $headers['outlet'] ] ) ) ) :
+		elseif ( !empty( $headers['outlet'] ) && !empty( $d[ $headers['outlet'] ] ) && preg_match( '/^[A-Z a-z\-]{6,10}$/', trim( $d[ $headers['outlet'] ] ) ) ) :
 			$station = str_replace( ' total', '-fm', strtolower( $d[ $headers['outlet'] ] ) );
 			if ( count( $data ) > 30 && preg_match( '/Mo\-Fr [0-9:\-AP]+/', $d[ $headers['time-period'] ] ) ) :
 				$date = explode( ' ', $d[ $headers['time-period'] ] );
